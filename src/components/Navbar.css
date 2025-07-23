@@ -1,0 +1,156 @@
+/* src/components/Navbar.css */
+
+/* ===== FONT IMPORTS - PUT THIS AT THE TOP ===== */
+/*
+  1. Download Kapakana font files (.woff/.woff2)
+  2. Place them in public/fonts/ folder
+  3. Uncomment and update these paths:
+*/
+/*
+@font-face {
+  font-family: 'Kapakana';
+  src: url('/fonts/Kapakana-Regular.woff2') format('woff2'),
+       url('/fonts/Kapakana-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+*/
+
+/*
+  For IM FELL DW Pica, add this to my public/index.html <head>:
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+DW+Pica:ital@0;1&display=swap" rel="stylesheet">
+*/
+
+
+/* src/components/Navbar.css */
+
+/* src/components/Navbar.css */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 10px;
+    width: 100%;
+    height: 100px;
+    background-color: white;
+    z-index: 1000;
+    padding: 0 4px;
+    gap: 20px; /* Space between items */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Subtle shadow */
+
+}
+
+.nav-group {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.nav-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    transition: transform 0.3s ease; /* Hover animation */
+}
+
+.nav-icon:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+}
+
+.nav-img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); /* Icon shadow */
+    transition: all 0.3s ease;
+}
+
+.nav-icon.my-work .nav-img,
+.nav-icon.about .nav-img {
+    width: 85px; /* Even larger for these */
+    height: 60px;
+}
+
+.nav-icon:hover .nav-img {
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); /* Enhanced shadow on hover */
+    transform: scale(1.1); /* Grow effect */
+}
+
+.nav-label {
+    font-family: 'IM FELL DW Pica', serif;
+    font-size: 0.8rem;
+    color: #BB1F44;
+    margin-top: 5px;
+}
+
+.nav-logo {
+    /*display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 40px;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo-main {
+    font-family: 'Kapakana', cursive;
+    font-size: 2.7rem;
+    color: #FF221A;
+    line-height: 1;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo-sub {
+    font-family: 'IM FELL DW Pica', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: #BB1F44;
+    margin-top: 1px;
+}
+/*
+!* ===== HOVER EFFECTS ===== *!
+.nav-icon:hover .nav-img {
+    transform: scale(1.1);
+}
+
+.nav-logo-text:hover .logo-main {
+    transform: scale(1.05);
+}
+*/
+
+
+/*
+For Fonts:
+
+Create folder: public/fonts/
+
+Add your Kapakana font files there
+
+Uncomment and update the @font-face in Navbar.css
+
+For IM FELL DW Pica, add the Google Fonts link to public/index.html
+
+For Navigation Icons:
+
+Create folder: public/images/nav-icons/
+
+Add your icon images (my-work.png, shop.png, about.png, contact.png)
+
+Uncomment the <img> tags in Navbar.js
+
+Uncomment the .nav-icon img styles in Navbar.css
+
+For Logo:
+
+Place your logo image in public/images/
+
+Uncomment the logo <img> tag in Navbar.js
+
+OR keep as text if you prefer
+*/
