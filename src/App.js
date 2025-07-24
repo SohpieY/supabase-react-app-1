@@ -1,11 +1,3 @@
-/*import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import withNavbar from './components/withNavbar';
-/!*import Navbar from './components/Navbar';*!/
-import Home from './Pages/Home.js';
-import About from './Pages/About.js';
-import Works from './Pages/Works.js';
-import Shop from './Pages/Shop.js';
-import Contact from './Pages/Contact.js';*/
 
 // src/App.js
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
@@ -18,7 +10,7 @@ import Contact from './Pages/Contact.js';
 
 // Create wrapped components using the HOC
 const HomeWithNavbar = withNavbar(Home);
-const AboutWithNavbar = withNavbar(About);
+// const AboutWithNavbar = withNavbar(About);
 const WorksWithNavbar = withNavbar(Works);
 const ShopWithNavbar = withNavbar(Shop);
 const ContactWithNavbar = withNavbar(Contact);
@@ -33,7 +25,8 @@ function App() {
                 {/* About Page - First entry point */}
                 <Route
                     path="/about"
-                    element={<AboutWithNavbar />}
+                    element={<About />}
+                    // element={<AboutWithNavbar />}
                 />
 
                 {/* Home Page */}

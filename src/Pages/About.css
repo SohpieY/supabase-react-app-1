@@ -1,8 +1,8 @@
 /* Main Container */
 .about-page {
-    padding: 2rem;
+    padding: 1rem;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 1rem;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -10,61 +10,133 @@
     min-height: 100vh;
 }
 
+.about-heading{
+    font-size: 3rem;
+    font-family: 'IM FELL DW Pica', serif;
+    font-style: italic;
+    color: #BB1F44;
+    margin-left: 1rem;
+    margin-top: 3rem;
+}
+
 /* Paper Sections - Updated Sizing and Colors */
 .about-section {
     position: absolute;
+    overflow: visible; /* Keeps the dotted lines contained */
     width: 90%;
     padding: 2.5rem;
     border: 1px solid #e0d6c2;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     transition: all 0.4s ease-out;
     cursor: pointer;
-    overflow-y: auto;
-    left: 50%;
-    transform: translateX(-50%);
+    border-radius: 0.7rem;
 }
 
+/* Four simple dotted lines */
+.about-section::before {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    right: 30px;
+    bottom: 30px;
+    border: 1px dashed rgba(0,0,0,0.2);
+    border-radius: 4px; /* Slightly smaller than container */
+    pointer-events: none; /* Allows clicks through the overlay */
+}
 /* Bottom Layer (Experience) - Largest */
 .about-section:nth-child(1) {
     z-index: 1;
-    height: 80%;
+    height: 100%;
+    width: 85%;
     background: #F0CED2; /* Dusty pink */
-    top: 100px;  /* ← Increase to move DOWN */
-    left: 70px; /* ← Increase to move RIGHT */
-    margin-top: -40%; /* Center vertically */
+    top: 40%;  /* ← Increase to move DOWN */
+    margin-top: 10%; /* Center vertically */
+    margin-left: -4.7%;
 }
 
 /* Middle Layer (Education) */
 .about-section:nth-child(2) {
     z-index: 2;
-    height: 70%;
+    height: 75%;
+    width: 50%;
     background: #EFEEEE; /* Light gray */
-    top: 60px;  /* ← Increase to move DOWN */
-    left: 80px; /* ← Increase to move RIGHT */
-    margin-top: -35%; /* Center vertically */
-    width: 85%;
+    margin-top: 24%; /* Center vertically */
+    margin-left: -3.8%;
 }
 
 /* Top Layer (Bio) - Smallest */
 .about-section:nth-child(3) {
     z-index: 3;
-    height: 60%;
+    height: 55%;
     background: #FFF9F9; /* Off-white pink */
     top: 40px;  /* ← Increase to move DOWN */
-    left: 60px; /* ← Increase to move RIGHT */
-    margin-top: -30%; /* Center vertically */
+    margin-top: 25%; /* Center vertically */
     width: 80%;
     cursor: default;
+    margin-left: -4.5%;
 }
 
+/*animations for the 3 layers*/
+/* Bottom layer (experience) hover effect */
+.about-section:nth-child(1):hover {
+    transform: translateY(-18px);
+    transition: transform 0.3s ease-out;
+}
+
+/* Middle layer (education) hover effect */
+.about-section:nth-child(2):hover {
+    transform: translateY(-18px);
+    transition: transform 0.3s ease-out;
+}
+
+/* Top layer (bio) hover effect - since it's not clickable, we'll make it more subtle */
+.about-section:nth-child(3):hover {
+    transform: translateY(-18px);
+    transition: transform 0.3s ease-out;
+}
+
+/* Ensure the active section stays in place when clicked */
+.about-section.active:hover {
+    transform: none;
+}
+
+/*
+!* Adjust the peek-left state to maintain consistency *!
+.about-section.peek-left:hover {
+    transform: translateX(1000px) translateY(0);
+}
+*/
 
 /* Bio Section Specific Styles */
 .bio-section {
-    border-radius: 12px;
+    border-radius: 0.7rem;
     position: relative;
     overflow: hidden;
 }
 
+/*the bio heading at the top*/
+/* Add to your existing CSS */
+.section-header {
+    font-family: 'Typewriter', monospace; /* Use a typewriter/TypeScript-like font */
+    font-size: 0.7rem;
+    letter-spacing: 0.2rem;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.section-header::before,
+.section-header::after {
+    content: "■"; /* Black box symbol */
+    font-size: 0.5rem;
+    vertical-align: middle;
+}
+
+/*dotten lines*/
 .bio-section::before {
     content: "";
     position: absolute;
@@ -93,22 +165,27 @@
 
 .bio-right {
     flex: 1;
+    margin-top: 1rem;
 }
 
 .profile-image {
     width: 100%;
     height: auto;
     border-radius: 4px;
+    margin-left: 0.5rem;
     margin-bottom: 1rem;
     aspect-ratio: 1/1;
     object-fit: cover;
 }
 
 .bio-title {
-    font-family: 'Karapeka', serif;
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    text-transform: lowercase;
+    font-family: 'Kapakana', cursive;
+    color: #FF221A;
+    font-size: 5rem;
+    /*
+    margin-top: 0rem;
+    */
+    margin-left: 1rem;
 }
 
 /* Contact Info Styles */
@@ -177,8 +254,10 @@
 
 /* Peek state */
 .about-section.peek-left {
-    transform: translateX(70%);
-    opacity: 0.9;
+    transform: translateX(1000px);
+    opacity: 1; /* Fully visible */
+    filter: brightness(0.98); /* Slight visual indication */
+    z-index: 4; /* Ensure it stays above inactive layers */
     pointer-events: auto;
 }
 
@@ -193,13 +272,46 @@
 .about-section h2 {
     font-family: 'IM FELL DW Pica', serif;
     font-size: 1.8rem;
+    margin-top: -1.5%;
     margin-bottom: 1.5rem;
     color: #333;
     font-weight: normal;
     text-transform: lowercase;
 }
 
-/* Experience Table */
+/* education Section */
+.education-content{
+    display: flex;
+    gap: 2rem;
+    height: 100%;
+}
+
+.education-title{
+    font-family: 'IM FELL DW Pica', serif;
+    font-style: italic;
+    font-size: 2.5rem !important;
+    margin: 0 0 1rem 0 !important;
+    margin-left: 1.1rem !important;
+}
+
+/* Experience Section */
+.experience-content{
+    /*
+    display: flex;
+    */
+    gap: 2rem;
+    height: 100%;
+}
+
+.experience-title{
+    font-family: 'IM FELL DW Pica', serif;
+    font-style: italic;
+    font-size: 2.5rem !important;
+    margin: 0 0 1rem 0;
+    margin-left: 1.1rem !important;
+
+}
+
 .experience-content table {
     width: 100%;
     border-collapse: collapse;

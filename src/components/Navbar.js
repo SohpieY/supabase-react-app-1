@@ -7,7 +7,7 @@ export default function Navbar() {
         <nav className="navbar">
             {/* Left Group - need to space evenly*/}
 
-            <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start' }}>
+            <div className="nav-box">
                 <Link to="/works" className="nav-icon my-work">
                     <img
                         src="/images/nav-icons/mywork_logobar.png"
@@ -19,7 +19,7 @@ export default function Navbar() {
             </div>
 
             {/* Middle Left - Shop */}
-            <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+            <div className="nav-box">
                 <Link to="/shop" className="nav-icon">
                     <img
                         src="/images/nav-icons/shop_logobar.png"
@@ -34,13 +34,13 @@ export default function Navbar() {
             {/* Center Logo */}
             <div className="nav-logo">
                 <Link to="/home" className="nav-icon">
-                    <span className="logo-main">Tina Wan</span>
+                    <span className="logo-main">Tina Won</span>
                     <span className="logo-sub">artist ✧ painter ✧ student</span>
                 </Link>
             </div>
 
             {/* Middle Right - About */}
-            <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+            <div className="nav-box">
                 <Link to="/about" className="nav-icon about">
                     <img
                         src="/images/nav-icons/aboutme_logobar.png"
@@ -52,7 +52,7 @@ export default function Navbar() {
             </div>
 
             {/* Right Group - need to space evenly from edge */}
-            <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+            <div className="nav-box">
                 <Link to="/contact" className="nav-icon">
                     <img
                         src="/images/nav-icons/letter_logobar.png"
