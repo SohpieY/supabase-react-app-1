@@ -157,6 +157,19 @@
     height: 100%;
 }
 
+.bio-above-line {
+    padding: 0 2rem 2rem 2rem; /* Add padding bottom to separate from line */
+    text-align: center;
+}
+
+.bio-below-line {
+    display: flex;
+    gap: 2rem;
+    flex-grow: 1;
+    padding-top: 2rem; /* Add padding top to separate from line */
+}
+
+
 .bio-left {
     flex: 0 0 40%;
     display: flex;

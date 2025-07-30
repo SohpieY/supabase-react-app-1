@@ -8,7 +8,7 @@ export default function Navbar() {
             {/* Left Group - need to space evenly*/}
 
             <div className="nav-box">
-                <Link to="/works" className="nav-icon my-work">
+                <Link to="/Works" className="nav-icon my-work">
                     <img
                         src="/images/nav-icons/mywork_logobar.png"
                         alt="My Work"
@@ -20,7 +20,7 @@ export default function Navbar() {
 
             {/* Middle Left - Shop */}
             <div className="nav-box">
-                <Link to="/shop" className="nav-icon">
+                <Link to="/Shop" className="nav-icon">
                     <img
                         src="/images/nav-icons/shop_logobar.png"
                         alt="Shop"
@@ -33,7 +33,7 @@ export default function Navbar() {
 
             {/* Center Logo */}
             <div className="nav-logo">
-                <Link to="/home" className="nav-icon">
+                <Link to="/Home" className="nav-icon">
                     <span className="logo-main">Tina Won</span>
                     <span className="logo-sub">artist ✧ painter ✧ student</span>
                 </Link>
@@ -41,7 +41,7 @@ export default function Navbar() {
 
             {/* Middle Right - About */}
             <div className="nav-box">
-                <Link to="/about" className="nav-icon about">
+                <Link to="/About" className="nav-icon about">
                     <img
                         src="/images/nav-icons/aboutme_logobar.png"
                         alt="About"
@@ -53,7 +53,7 @@ export default function Navbar() {
 
             {/* Right Group - need to space evenly from edge */}
             <div className="nav-box">
-                <Link to="/contact" className="nav-icon">
+                <Link to="/Contact" className="nav-icon">
                     <img
                         src="/images/nav-icons/letter_logobar.png"
                         alt="Contact"

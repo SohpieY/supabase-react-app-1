@@ -1,0 +1,140 @@
+/* Works.css */
+.works-page{
+    width: 100vw;
+    min-height: 200vh;
+}
+
+gallery-artworks {
+    position: relative;
+    align-items: center;
+    width: 500px;
+    height: 500px;
+    margin: 0 auto;
+}
+
+.works-title{
+    position: relative;
+    text-align: center;
+    margin-top: 10%;
+    font-family:'IM FELL DW Pica', serif;
+    font-style: italic;
+    color: #BB1F44;
+    font-size: 3rem !important;
+}
+
+.works-title:hover::after {
+    content: ' ✧･ﾟ: *✧･ﾟ:*';
+    animation: asciiFloat 3s infinite linear;
+}
+@keyframes asciiFloat {
+    0% { transform: translateY(0) }
+    50% { transform: translateY(-10px) }
+}
+
+.works-secondtitle{
+    position: relative;
+    text-align: center;
+    margin-top: 50%;
+    font-family:'IM FELL DW Pica', serif;
+    font-style: italic;
+    color: #BB1F44;
+    font-size: 3rem !important;
+
+}
+
+
+/*TIMELINE (10s total: 8s show + 2s pause) */
+@keyframes masterTimeline {
+    0% { opacity: 0; } /* Start hidden */
+
+    /* Each artwork appears at its designated time */
+    0.1% { opacity: 1; } /* go to visible */
+
+    /* All disappear together at 80% (8s) */
+    80% { opacity: 1; } /* visibility last moment */
+    80.1% { opacity: 0; } /*  hide */
+
+    100% { opacity: 0; } /* Stay hidden until restart */
+}
+
+/* BASE STYLES FOR ALL ARTWORKS */
+.gallery-artworks img {
+    align-items: center;
+    position: absolute;
+    top: 360px;
+    left: 590px;
+    width: 20%;
+    height: auto;
+    opacity: 0;
+    animation: masterTimeline 10s infinite linear;
+    transform-origin: center;
+}
+
+/* INDIVIDUAL ARTWORK TIMING (negative delays) */
+.apples-painting {
+    transform: rotate(-3deg);
+    z-index: 1;
+    animation-delay: 0s; /* Starts at beginning */
+}
+.thread-artwork {
+    transform: rotate(2deg);
+    z-index: 2;
+    animation-delay: -1s; /* Starts 1s into animation */
+}
+.dog-artwork {
+    transform: rotate(-4deg);
+    z-index: 3;
+    animation-delay: -2s; /* Starts 2s into animation */
+}
+.laying-painting {
+    transform: rotate(1deg);
+    z-index: 4;
+    animation-delay: -3s;
+}
+.pattern-painting {
+    transform: rotate(-2deg);
+    z-index: 5;
+    animation-delay: -4s;
+}
+.tablecloth-print {
+    transform: rotate(3deg);
+    z-index: 6;
+    animation-delay: -5s;
+}
+.cabinet-painting {
+    transform: rotate(-1deg);
+    z-index: 7;
+    animation-delay: -6s;
+}
+.fishes-mixedmedia {
+    transform: rotate(4deg);
+    z-index: 8;
+    animation-delay: -7s; /* Starts 7s into animation */
+}
+
+/*here is for the seasonal display*/
+
+.season-picks{
+    margin-left: 50px;
+    margin-top: 240px;
+}
+
+.season-title{
+    font-family: 'Kapakana', cursive;
+    font-size: 7rem;
+    color: #FF221A;
+    line-height: 0.8;
+    text-shadow: 0 2px 2px rgba(0,0,1,0.2);
+}
+
+.season-title:hover{
+    color: midnightblue;
+}
+
+.season-painting{
+    position: relative;
+    align-items: center;
+    width: 20%;
+    height: auto;
+    margin: 0 auto;
+}

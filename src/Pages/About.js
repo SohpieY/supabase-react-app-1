@@ -51,24 +51,28 @@ export default function About() {
             title: '', // Empty because we handle it in content
             content: (
                 <div className="bio-content">
-
-                    <div className="section-header">Bio</div>
-                    <div className="bio-left">
-                        <span className="bio-title">Tina Won</span>
-                        <img
-                            src="images/tina_placeholder_aboutme.jpg"
-                            className="profile-image"
-                            alt="Tina Won"
-                        />
+                    <div className="bio-above-line">
+                        <div className="section-header">Bio</div>
                     </div>
-                    <div className="bio-right">
-                        <p>I'm Tina Won, a visual artist and aspiring biologist raised and based in Hong Kong. I was born in Beijing to Chinese parents. I am bilingual: fluent in both Mandarin and English. Currently attending High School as a senior, and soon will be abroad studying Biology.</p>
-                        <p>My work explores the intricate relationship between humanity and nature, drawing inspiration from both my Chinese heritage and scientific interests. My dual passion for visual arts and biology manifests in pieces that examine ecological systems, biological structures, and environmental consciousness.</p>
-                        <div className="contact-info">
-                            <p><span>email</span> tinawoao26@student.cis.edu.hk</p>
-                            <p><span>instagram</span> doonphie</p>
-                            <p><span>linkedin</span> linkedin.com/in/tina-won</p>
-                            <p><span>resume</span> download here</p>
+
+                    <div className="bio-below-line">
+                        <div className="bio-left">
+                            <span className="bio-title">Tina Won</span>
+                            <img
+                                src="images/tina_placeholder_aboutme.jpg"
+                                className="profile-image"
+                                alt="Tina Won"
+                            />
+                        </div>
+                        <div className="bio-right">
+                            <p>I'm Tina Won, a visual artist and aspiring biologist raised and based in Hong Kong. I was born in Beijing to Chinese parents. I am bilingual: fluent in both Mandarin and English. Currently attending High School as a senior, and soon will be abroad studying Biology.</p>
+                            <p>My work explores the intricate relationship between humanity and nature, drawing inspiration from both my Chinese heritage and scientific interests. My dual passion for visual arts and biology manifests in pieces that examine ecological systems, biological structures, and environmental consciousness.</p>
+                            <div className="contact-info">
+                                <p><span>email</span> tinawoao26@student.cis.edu.hk</p>
+                                <p><span>instagram</span> doonphie</p>
+                                <p><span>linkedin</span> linkedin.com/in/tina-won</p>
+                                <p><span>resume</span> download here</p>
+                            </div>
                         </div>
                     </div>
                 </div>

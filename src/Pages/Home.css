@@ -1,0 +1,452 @@
+/* src/Pages/Home.css */
+.artistic-layout {
+    position: relative;
+    width: 100vw;
+    min-height: 200vh;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 100px; /* Space for dog bar */
+    margin-top:5%;
+
+}
+
+.content-wrapper {
+    position: relative;
+    flex: 1;
+    min-height: 80vh; /* Ensures enough space for content */
+    padding-top: 80px; /* Space for top elements */
+
+}
+
+.center-heading {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+}
+
+.swirl-container {
+    position: absolute;
+    top: 40%; /* Adjust this value to move up/down */
+    left: 57%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    width: 600px; /* Fixed width for better control */
+}
+
+.swirl {
+    width: 63%; /* Adjust size */
+    height: auto;
+    opacity: 0.8; /* Optional: Reduce prominence */
+}
+
+/* Typing container */
+.typing-container {
+    display: inline-block;
+    height: 12rem; /* Match your font size */
+}
+
+/* Individual letters */
+.letter {
+    font-family: 'Kapakana', cursive;
+    font-size: 12rem;
+    color: #FF221A;
+    line-height: 0.8;
+    text-shadow: 0 2px 4px rgba(0,0,1,0.3);
+    opacity: 0;
+    display: inline-block;
+    transform: translateY(20px);
+}
+
+/* Letter animations */
+.letter:nth-child(1) {
+    animation:
+            fadeIn 0.3s 0.5s forwards,
+            bounce 0.5s 0.8s;
+}
+.letter:nth-child(2) {
+    animation:
+            fadeIn 0.3s 0.8s forwards,
+            bounce 0.5s 1.1s;
+}
+.letter:nth-child(3) {
+    animation:
+            fadeIn 0.3s 1.1s forwards,
+            bounce 0.5s 1.4s;
+}
+.letter:nth-child(4) {
+    animation:
+            fadeIn 0.3s 1.4s forwards,
+            bounce 0.5s 1.7s;
+}
+
+/* Cursor */
+.cursor {
+    font-size: 8rem;
+    color: #FF221A;
+    animation: blink 0.7s infinite;
+    opacity: 0;
+    animation-delay: 1.7s;
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+@keyframes blink {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+.center-subheading {
+    font-family:'IM FELL DW Pica', serif;
+    font-style: italic;
+    font-size: 1.5rem !important;
+    margin-right: 50%;
+    padding-right: 0;
+    text-align: left;
+}
+
+.center-subheading-2 {
+    font-family:'IM FELL DW Pica', serif;
+    font-size: 1.3rem !important;
+    margin-top: -30px;
+    margin-left: 60%;
+}
+
+.center-subheading-3 {
+    font-family:'IM FELL DW Pica', serif;
+    font-style: italic;
+    color: #BB1F44;
+    font-size: 1.5rem !important;
+    margin-top: -20px;
+}
+
+.center-heading h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.center-heading h2 {
+    font-size: 1.3rem;
+    font-weight: normal;
+    line-height: 1.5;
+}
+
+.corner-image {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.corner-image img {
+    width: 100%;
+    height: 100%;
+}
+
+.corner-image span {
+    font-family: 'IM FELL DW Pica', serif;
+    color: #BB1F44;
+    position: relative;
+    bottom: 30px;
+    left: 70%;
+    transform: translateX(-50%);
+    font-size: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.top-left span{
+    left: 73%;
+}
+
+.bottom-left span{
+    left: 62%;
+
+}
+
+.top-right span{
+    left:74%;
+}
+
+.top-left{
+    width: 35%;
+    height: auto;
+}
+
+.top-right{
+    width: 35%;
+    height: auto;
+}
+
+.bottom-left, .bottom-right {
+    position: absolute; /* Changed from absolute */
+
+}
+
+.bottom-left {
+    width: 35%;
+    height: auto;
+    bottom: -18% !important; /* Increase this value to move down further */
+}
+
+.bottom-right {
+    width: 35%;
+    height: auto;
+    bottom: -18% !important; /* Increase this value to move down further */
+
+}
+
+.corner-image:hover {
+    transform: scale(1.10);
+}
+
+.corner-image:hover span {
+    opacity: 1;
+}
+
+/* Corner Positions */
+.top-left {
+    top: 30px;
+    left: 30px;
+}
+
+.top-right {
+    top: 30px;
+    right: 30px;
+}
+
+.bottom-left {
+    bottom: 30px;
+    left: 30px;
+}
+
+.bottom-right {
+    bottom: 30px;
+    right: 30px;
+}
+
+
+/* Sidebar container */
+.side-bar {
+    position: fixed;
+    margin-left: 94.5% !important;
+    margin-top: -60% !important;
+}
+
+/* Pin and text group */
+.pin-and-text {
+    animation: scrollText 20s linear infinite;
+    display: flex;
+    flex-direction: column; /* Stacks children vertically */
+    align-items: flex-start; /* Aligns left */
+    gap: 5px; /* Space between pin and text */
+    margin-top: 100% !important;
+}
+
+/* Pin image */
+.pin-location {
+    position: absolute;
+    left: -6px; /* Positions pin to the left of text */
+    top: 760px; /* Moves pin slightly upward */
+    width: 65px;
+    height: auto;
+    z-index: 2; /* Ensures pin stays above text */
+    /*width: 65px; !* Fixed size for better control *!
+    height: auto;
+    transform: translateY(-50%);
+    margin-left: 50% !important; !* Your existing constraint *!*/
+}
+
+
+
+/* Animation for vertical text */
+.vertical-text {
+    white-space: nowrap;
+    text-align: center;
+    margin-left: 89%;
+    transform: translateY(100%); /* Start off screen */
+}
+
+@keyframes scrollText {
+    0% {
+        transform: translateY(-100%); /* Below viewport */
+    }
+    100% {
+        transform: translateY(100%); /* Exit top */
+    }
+}
+
+/* Text styling */
+.vertical-text {
+    font-family: 'IM FELL DW Pica', serif;
+    color: #FF221A;
+    letter-spacing: 2px;
+    line-height: 1.5;
+    font-size: 1.2rem;
+}
+
+
+
+/* Dog Bar */
+.connecting-bar {
+    /*position: absolute;
+    bottom: -270px; !* Decrease this value to move up *!
+    left: 0;
+    width: 100%;
+    !* Example: bottom: 10px will move it up 10px from current position *!
+    z-index: 10;*/
+    margin-top: -15% !important;
+    width: 100%;
+    text-align: center;
+    padding: 20px 0; /* Spacing */
+}
+
+.dog-bar {
+    width: 200%;
+    max-width: 1500px;
+}
+
+.dog {
+    position: absolute;
+    width: 80px;
+    top: 1000px;
+    left: 50%;
+    transform: translateX(-50%);
+    will-change: transform;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-10px); }
+}
+
+.gallery{
+    justify-content: center; /* Horizontal centering */
+    align-items: center;     /* Vertical centering */
+    text-align: center;      /* Center text within heading */
+    margin-top: -250px !important;
+    left: -20% !important;
+    padding-bottom: 40%;
+    /*position: absolute;
+    justify-content: center;
+    top: 115%;
+    align-items: center;*/
+}
+
+.gallery-heading{
+    font-family: 'IM FELL DW Pica', serif;
+    font-size: 2rem;
+}
+
+.gallery img {
+    transition: all 0.3s ease;
+    position: absolute;
+    transform-origin: center;
+    border: 2px solid transparent;
+}
+
+/* bounce animation */
+.gallery img {
+    animation: gentleBounce 3s ease-in-out infinite;
+    transform-origin: center;
+}
+
+@keyframes gentleBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px); /* Adjust bounce height */
+    }
+}
+
+.gallery img:hover {
+    transform: scale(1.2); /* 20% larger on hover */
+    border: 3px solid #FF221A; /* Red border */
+    box-shadow: 0 0 15px rgba(255, 34, 26, 0.5); /* Glow effect */
+    z-index: 10 !important; /* Bring to front */
+}
+
+.apples-painting{
+    width: 30%;
+    height: auto;
+    left: 34%;
+    top: 60%;
+    z-index: 4;
+}
+
+.thread-artwork{
+    width: 33%;
+    height: auto;
+    top:72%;
+    left: 50%;
+    z-index:3;
+}
+
+.flowerpot{
+    width: 30%;
+    height: auto;
+    left: 15% !important;
+    z-index: 6;
+}
+
+.laying-painting{
+    width: 27%;
+    height: auto;
+    top: 55%;
+    left: 60%;
+    z-index: 4;
+
+}
+
+.pattern-painting{
+    width: 27%;
+    height: auto;
+    top:70%;
+    left: 24%;
+    z-index: 5;
+}
+
+.arrow-gif{
+    width: 30%;
+    height: auto;
+    left: 2%;
+    top: 1950px;
+    z-index:12;
+    transform: scaleX(-1)!important;
+    rotate: -180deg;
+}
+
+.arrow-message{
+    position: absolute;
+    font-size: 3rem;
+    top: 2300px !important;
+    left: 15%;
+    animation: bounce 1.5s infinite ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0); /* Start and end position */
+    }
+    50% {
+        transform: translateY(-20px); /* Bounce up */
+    }
+}
+
+/* need to extend */
+.page-extender {
+    height: 500px; /* Adjust this value to control extra length */
+    width: 100%;
+    opacity: 0; /* Makes it invisible */
+    pointer-events: none; /* Allows clicks to pass through */
+}

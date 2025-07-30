@@ -1,16 +1,15 @@
-
 // src/App.js
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import withNavbar from './components/withNavbar';
-import Home from './Pages/Home.js';
-import About from './Pages/About.js';
-import Works from './Pages/Works.js';
-import Shop from './Pages/Shop.js';
-import Contact from './Pages/Contact.js';
+import Home from './Pages/Home';
+import About from './Pages/About';
+import Works from './Pages/Works';
+import Shop from './Pages/Shop';
+import Contact from './Pages/Contact';
 
-// Create wrapped components using the HOC
+// Create wrapped components
 const HomeWithNavbar = withNavbar(Home);
-// const AboutWithNavbar = withNavbar(About);
+const AboutWithNavbar = withNavbar(About);
 const WorksWithNavbar = withNavbar(Works);
 const ShopWithNavbar = withNavbar(Shop);
 const ContactWithNavbar = withNavbar(Contact);
@@ -19,39 +18,17 @@ function App() {
     return (
         <Router>
             <Routes>
-                {/* Redirect root path to /about */}
-                <Route path="/" element={<Navigate to="/about" replace />} />
+                {/*
+                <Route path="/" element={<HomeWithNavbar />} />
+                */}
+                <Route path="/" element={<WorksWithNavbar />} />
 
-                {/* About Page - First entry point */}
-                <Route
-                    path="/about"
-                    element={<About />}
-                    // element={<AboutWithNavbar />}
-                />
 
-                {/* Home Page */}
-                <Route
-                    path="/home"
-                    element={<HomeWithNavbar />}
-                />
-
-                {/* Works Page */}
-                <Route
-                    path="/works"
-                    element={<WorksWithNavbar />}
-                />
-
-                {/* Shop Page */}
-                <Route
-                    path="/shop"
-                    element={<ShopWithNavbar />}
-                />
-
-                {/* Contact Page */}
-                <Route
-                    path="/contact"
-                    element={<ContactWithNavbar />}
-                />
+                {/* Other pages */}
+                <Route path="/About" element={<AboutWithNavbar />} />
+                <Route path="/Home" element={<HomeWithNavbar />} />
+                <Route path="/Shop" element={<ShopWithNavbar />} />
+                <Route path="/Contact" element={<ContactWithNavbar />} />
             </Routes>
         </Router>
     );
