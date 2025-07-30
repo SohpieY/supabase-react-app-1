@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import './About.css';
-import NavBar from '../components/Navbar';
 
 export default function About() {
     const [activeSection, setActiveSection] = useState(null);
@@ -86,13 +85,8 @@ export default function About() {
     };
 
     return (
-        <body>
-        <div>
-            <NavBar></NavBar>
-        </div>
         <div className="about-page">
             <h1 className="about-heading">About Me 𓆝 𓆟 𓆞 𓆝 𓆟</h1>
-
             <div className="about-sections-container">
                 <div className="about-sections">
                     {sections.map((section, index) => (
@@ -114,8 +108,6 @@ export default function About() {
                 </div>
             </div>
         </div>
-        </body>
-
     );
 }
 
