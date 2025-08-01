@@ -70,47 +70,7 @@
     transform-origin: center;
 }
 
-/* INDIVIDUAL ARTWORK TIMING (negative delays) */
-.apples-painting {
-    transform: rotate(25deg);
-    z-index: 1;
-    animation-delay: 0s; /* Starts at beginning */
-}
-.thread-artwork {
-    transform: rotate(50deg);
-    z-index: 2;
-    animation-delay: -1s; /* Starts 1s into animation */
-}
-.dog-artwork {
-    transform: rotate(70deg);
-    z-index: 3;
-    animation-delay: -2s; /* Starts 2s into animation */
-}
-.laying-painting {
-    transform: rotate(90deg);
-    z-index: 4;
-    animation-delay: -3s;
-}
-.pattern-painting {
-    transform: rotate(100deg);
-    z-index: 5;
-    animation-delay: -4s;
-}
-.tablecloth-print {
-    transform: rotate(115deg);
-    z-index: 6;
-    animation-delay: -5s;
-}
-.cabinet-painting {
-    transform: rotate(130deg);
-    z-index: 7;
-    animation-delay: -6s;
-}
-.fishes-mixedmedia {
-    transform: rotate(0deg);
-    z-index: 8;
-    animation-delay: -7s; /* Starts 7s into animation */
-}
+
 
 /*here is for the seasonal display*/
 
@@ -137,26 +97,4 @@
     width: 20%;
     height: auto;
     margin: 0 auto;
-}
-
-/* Test classes */
-.stack {
-    margin: 100px auto;
-    width: 500px;
-    height: 500px;
-    padding: 0;
-    position: relative;
-    max-width: 100%;
-    align-content: center;
-}
-
-.stack img {
-    width: 50%;
-    height: auto;
-    position: absolute;
-    top: 0;
-    left:25%;
-    transition: all 0.3s;
-    transform-origin: center;
-    align-self: center;
 }
