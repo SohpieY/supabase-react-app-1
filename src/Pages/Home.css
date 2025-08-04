@@ -371,7 +371,7 @@
 
 .gallery img:hover {
     transform: scale(1.2); /* 20% larger on hover */
-    border: 3px solid #FF221A; /* Red border */
+    /*border: 3px solid #FF221A; !* Red border *!*/
     box-shadow: 0 0 15px rgba(255, 34, 26, 0.5); /* Glow effect */
     z-index: 10 !important; /* Bring to front */
 }

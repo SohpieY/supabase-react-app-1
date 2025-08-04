@@ -76,25 +76,27 @@
     cursor: default;
     margin-left: -4.5%;
 }
+/*
 
-/*animations for the 3 layers*/
-/* Bottom layer (experience) hover effect */
+!*animations for the 3 layers*!
+!* Bottom layer (experience) hover effect *!
 .about-section:nth-child(1):hover {
     transform: translateY(-18px);
     transition: transform 0.3s ease-out;
 }
 
-/* Middle layer (education) hover effect */
+!* Middle layer (education) hover effect *!
 .about-section:nth-child(2):hover {
-    transform: translateY(-18px);
+    nptransform: translateY(-18px);
     transition: transform 0.3s ease-out;
 }
 
-/* Top layer (bio) hover effect - since it's not clickable, we'll make it more subtle */
+!* Top layer (bio) hover effect - since it's not clickable, we'll make it more subtle *!
 .about-section:nth-child(3):hover {
     transform: translateY(-18px);
     transition: transform 0.3s ease-out;
 }
+*/
 
 /* Ensure the active section stays in place when clicked */
 .about-section.active:hover {

@@ -4,7 +4,7 @@
     min-height: 200vh;
 }
 
-gallery-artworks {
+.gallery-artworks {
     position: relative;
     align-items: center;
     width: 500px;
@@ -34,12 +34,40 @@ gallery-artworks {
 .works-secondtitle{
     position: relative;
     text-align: center;
-    margin-top: 50%;
+    /*margin-top: 50%;*/
     font-family:'IM FELL DW Pica', serif;
     font-style: italic;
     color: #BB1F44;
     font-size: 3rem !important;
 
+}
+
+/*
+!*TIMELINE (10s total: 8s show + 2s pause) *!
+@keyframes masterTimeline {
+    0% { opacity: 0; } !* Start hidden *!
+
+    !* Each artwork appears at its designated time *!
+    0.1% { opacity: 1; } !* go to visible *!
+
+    !* All disappear together at 80% (8s) *!
+    80% { opacity: 1; } !* visibility last moment *!
+    80.1% { opacity: 0; } !*  hide *!
+
+    100% { opacity: 0; } !* Stay hidden until restart *!
+}*/
+
+/* BASE STYLES FOR ALL ARTWORKS */
+.gallery-artworks img {
+    /*align-items: center;*/
+    position: absolute;
+    /*top: 360px;*/
+    /*left: 590px;*/
+    width: 20%;
+    height: auto;
+    opacity: 0;
+    animation: masterTimeline 10s infinite linear;
+    transform-origin: center;
 }
 
 
@@ -59,10 +87,10 @@ gallery-artworks {
 
 /* BASE STYLES FOR ALL ARTWORKS */
 .gallery-artworks img {
-    align-items: center;
+    /*align-items: center;*/
     position: absolute;
-    top: 360px;
-    left: 590px;
+    /*top: 360px;*/
+    /*left: 590px;*/
     width: 20%;
     height: auto;
     opacity: 0;
@@ -72,50 +100,73 @@ gallery-artworks {
 
 /* INDIVIDUAL ARTWORK TIMING (negative delays) */
 .apples-painting {
-    transform: rotate(-3deg);
+    transform: rotate(25deg);
     z-index: 1;
     animation-delay: 0s; /* Starts at beginning */
 }
 .thread-artwork {
-    transform: rotate(2deg);
+    transform: rotate(50deg);
     z-index: 2;
     animation-delay: -1s; /* Starts 1s into animation */
 }
 .dog-artwork {
-    transform: rotate(-4deg);
+    transform: rotate(70deg);
     z-index: 3;
     animation-delay: -2s; /* Starts 2s into animation */
 }
 .laying-painting {
-    transform: rotate(1deg);
+    transform: rotate(90deg);
     z-index: 4;
     animation-delay: -3s;
 }
 .pattern-painting {
-    transform: rotate(-2deg);
+    transform: rotate(100deg);
     z-index: 5;
     animation-delay: -4s;
 }
 .tablecloth-print {
-    transform: rotate(3deg);
+    transform: rotate(115deg);
     z-index: 6;
     animation-delay: -5s;
 }
 .cabinet-painting {
-    transform: rotate(-1deg);
+    transform: rotate(130deg);
     z-index: 7;
     animation-delay: -6s;
 }
 .fishes-mixedmedia {
-    transform: rotate(4deg);
+    transform: rotate(0deg);
     z-index: 8;
     animation-delay: -7s; /* Starts 7s into animation */
+}
+
+
+/* Test classes */
+.stack {
+    margin: 100px auto;
+    width: 500px;
+    height: 500px;
+    padding: 0;
+    position: relative;
+    max-width: 100%;
+    align-content: center;
+}
+
+.stack img {
+    width: 50%;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left:25%;
+    transition: all 0.3s;
+    transform-origin: center;
+    align-self: center;
 }
 
 /*here is for the seasonal display*/
 
 .season-picks{
-    margin-left: 50px;
+    margin-left: 3%;
     margin-top: 240px;
 }
 
@@ -131,10 +182,451 @@ gallery-artworks {
     color: midnightblue;
 }
 
-.season-painting{
-    position: relative;
-    align-items: center;
-    width: 20%;
+
+.season-subtitle{
+    margin-top: -2%;
+}
+
+/* Container for all artworks - now more flexible */
+.painting-miseenplace {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 40px auto;
+    align-items: start;
+}
+
+/* Artwork containers - now more flexible */
+.thread-artwork-season,
+.cabinet-artwork-season,
+.fishes-artwork-season,
+.pattern-artwork-season {
+    width: 500px;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background: white;
+    transition: transform 0.3s ease;
+    box-sizing: border-box;
+}
+
+.thread-artwork-season {
+    margin-left: -37%;
+    gap: 30px;
+}
+.cabinet-artwork-season{
+    display: flex!important;            /* Flexbox for horizontal layout */
+    flex-direction: row !important;      /* Image and text side by side */
+    align-items: flex-start;  /* Align to the top */
+    gap: 30px;               /* Space between image and text */
+    width: 100%;             /* Full width of its grid cell */
+    margin-left: 20% !important; /* Your existing offset */
+    margin-top: -5% !important;
+    padding: 20px;
+    box-sizing: border-box;       /* Ensures responsiveness */
+}
+
+.fishes-artwork-season {
+    margin-left: -38%;
+    margin-top: -5%;
+    display: flex;            /* Flexbox for horizontal layout */
+    flex-direction: row;      /* Puts image and text in a row */
+    align-items: flex-start;  /* Aligns items to the top */
+    gap: 30px;               /* Space between image and text */
+    width: 600px;            /* Wider to accommodate both */
+    max-width: 100%;         /* Ensures responsiveness */
+}
+
+.pattern-artwork-season {
+    margin-top:-5%;
+    display: flex;            /* Flexbox for horizontal layout */
+    flex-direction: column;      /* Puts image and text in a row */
+    align-items: flex-start;  /* Aligns items to the top */
+    gap: 30px;               /* Space between image and text */
+    width: 600px;            /* Wider to accommodate both */
+    max-width: 100%;
+
+}
+
+.pattern-artwork-season {
+    margin-left: 20%;
+}
+
+
+/* Make some items larger for variety */
+.thread-artwork-season {
+    grid-column: span 1;
+}
+.cabinet-artwork-season {
+    grid-column: span 1;
+}
+.fishes-artwork-season {
+    grid-column: span 1;
+}
+.pattern-artwork-season {
+    grid-column: span 1;
+}
+
+/* Hover effect for interaction */
+.thread-artwork-season:hover,
+.cabinet-artwork-season:hover,
+.fishes-artwork-season:hover,
+.pattern-artwork-season:hover {
+    transform: translateY(-5px);
+}
+
+/* Let images determine their own size */
+.thread-img-misenplace,
+.cabinet-img-misenplace,
+.fishes-img-misenplace,
+.pattern-img-misenplace {
+    width: 100% !important;
     height: auto;
-    margin: 0 auto;
+    max-height: none; /* Remove restriction */
+    object-fit: contain;
+}
+
+.thread-img-misenplace{
+    width: 140% !important;
+    height: auto;
+    margin-left:2%;
+}
+.cabinet-img-misenplace {
+    width: 60% !important;    /* Your existing image width */
+    height: auto;
+    object-fit: contain;
+    margin-top: 3%;
+
+
+}
+.fishes-img-misenplace {
+    width: 80% !important;
+    height: auto;
+    rotate: -1deg;
+    margin-left: 70%;
+
+}
+
+.pattern-img-misenplace {
+    width: 80% !important;
+    height: auto;
+}
+
+/* For larger viewports, make some artworks bigger */
+@media (min-width: 900px) {
+    .thread-artwork-season {
+        grid-column: span 1;
+    }
+    .cabinet-artwork-season {
+        grid-column: span 2;
+    }
+    .fishes-artwork-season {
+        grid-column: span 1;
+    }
+    .pattern-artwork-season {
+        grid-column: span 2;
+    }
+}
+
+/* Text container */
+.thread-text,
+.cabinet-text,
+.fishes-text,
+.pattern-text {
+    font-family: 'IM FELL DW Pica', serif;
+    padding: 0 10px;
+}
+
+.fishes-text{
+    width: 80% !important;
+}
+
+.cabinet-text{
+    margin-top: 3% !important;
+}
+
+/* Title consistency */
+.thread-title,
+.cabinet-title,
+.fishes-title,
+.pattern-title {
+    color: #BB1F44;
+    font-size: 1.5rem;
+    margin: 0 0 10px 0;
+}
+
+.fishes-title {
+    width: 300%;
+}
+
+
+
+/* Subtitle styling */
+.thread-subtitle,
+.cabinet-subtitle,
+.fishes-subtitle,
+.pattern-subtitle {
+    color: #333;
+    font-size: 1rem;
+    font-style: italic;
+    margin: 0 0 15px 0;
+}
+
+.fishes-subtitle {
+    width: 300%;
+}
+
+.pattern-subtitle {
+    width: 150%;
+}
+
+/* Description text */
+.thread-desc,
+.cabinet-desc,
+.fishes-desc,
+.pattern-desc {
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+}
+
+
+
+
+/* Text dex container*/
+.thread-desc {
+    grid-area: text;
+    width: 143% !important; /* Minimum text width */
+    text-align: justify;
+}
+
+.cabinet-desc {
+    grid-area: text;
+    width: 80% !important;
+    text-align: justify;
+}
+
+.fishes-desc {
+    grid-area: text;
+    width: 280% !important;
+    text-align: justify;
+}
+
+.pattern-desc {
+    grid-area: text;
+    width: 120%;
+    text-align: justify;
+    text-justify: inter-word;  /* appearently improves spacing between words */
+    hyphens: auto;
+}
+
+/* the bottom filter section thing */
+.portfolio-container {
+    width: 100vw;
+    display: flex;
+    margin: 4rem 0;
+}
+
+.portfolio-sidebar {
+    width: 15%;
+    padding: 2rem;
+    background-color: white;
+}
+
+.portfolio-header h1 {
+    font-family: 'IM FELL DW Pica', serif;
+    font-style: italic;
+    color: #BB1F44;
+    font-size: 3rem !important;
+    text-align: left;
+}
+
+.portfolio-header p {
+    font-family: 'IM FELL DW Pica', serif;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+    text-align: left;
+}
+
+/* Sort Section */
+.sort-section {
+    padding-bottom: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid #000000;
+    border-bottom: 2px solid #000000;
+    margin-bottom: 0.6rem;
+}
+
+.sort-section h3 {
+    font-family: 'IM FELL DW Pica', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #BB1F44;
+}
+
+.sort-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sort-option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.25rem 0;
+    font-family: 'IM FELL DW Pica', serif;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.sort-option input[type="radio"] {
+    margin-right: 0.5rem;
+    accent-color: #BB1F44;
+}
+
+.sort-option:hover {
+    color: #BB1F44;
+}
+
+/* Filter Section */
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.filter-dropdown {
+    border-bottom: 2px solid #000000;
+}
+/*this is where to set margin for the filter*/
+.filter-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1.2rem;
+    padding-top: 1rem;
+    background: none;
+    border: none;
+    font-family: 'IM FELL DW Pica', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #BB1F44;
+    cursor: pointer;
+    text-align: left;
+}
+
+.filter-header:hover {
+    color: #333;
+}
+
+.arrow {
+    transition: transform 0.2s ease;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.arrow.expanded {
+    transform: rotate(180deg);
+}
+
+.filter-content {
+    padding-bottom: 1rem;
+}
+
+.filter-placeholder {
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    color: #666;
+    font-family: 'IM FELL DW Pica', serif;
+    font-size: 0.85rem;
+    text-align: center;
+    border: 1px dashed #ddd;
+}
+
+/* Gallery Styles */
+.portfolio-gallery {
+    flex: 1;
+    padding: 2rem;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    max-width: 100%;
+}
+
+@media (max-width: 768px) {
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+}
+.gallery-item {
+    aspect-ratio: 4/3;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    background-color: white;
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.item-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #BB1F44;
+    font-family: 'IM FELL DW Pica', serif;
+    font-size: 0.9rem;
+    border: 2px dashed #ddd;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .portfolio-container {
+        flex-direction: column;
+    }
+
+    .portfolio-sidebar {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .portfolio-gallery {
+        padding: 1rem;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .portfolio-sidebar {
+        padding: 1rem 0.5rem;
+    }
+
+    .portfolio-gallery {
+        padding: 1rem 0.5rem;
+    }
 }

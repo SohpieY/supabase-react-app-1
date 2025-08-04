@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import './About.css';
-import NavBar from '../components/Navbar';
 
 export default function About() {
     const [activeSection, setActiveSection] = useState(null);
@@ -86,13 +85,8 @@ export default function About() {
     };
 
     return (
-        <body>
-        <div>
-            <NavBar></NavBar>
-        </div>
         <div className="about-page">
             <h1 className="about-heading">About Me 𓆝 𓆟 𓆞 𓆝 𓆟</h1>
-
             <div className="about-sections-container">
                 <div className="about-sections">
                     {sections.map((section, index) => (
@@ -114,106 +108,5 @@ export default function About() {
                 </div>
             </div>
         </div>
-        </body>
-
     );
 }
-
-/*
-import { useState } from 'react';
-import './About.css';
-
-export default function About() {
-    const [activeSection, setActiveSection] = useState(null);
-
-    const sections = [
-        {
-            id: 'experience',
-            title: 'experience',
-            content: (
-                <div className="experience-content">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>YEAR</th>
-                            <th>COMPANY</th>
-                            <th>POSITION</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>2024/11 - 2025/03</td>
-                            <td>CONDITION 2025</td>
-                            <td>GRAPHIC DESIGNER ART DIRECTOR<br/>BRANDING TEAM</td>
-                        </tr>
-                        {/!* Add all other experience rows here *!/}
-                        </tbody>
-                    </table>
-                </div>
-            )
-        },
-        {
-            id: 'education',
-            title: 'education',
-            content: <div>Educational details...</div>
-        },
-        {
-            id: 'bio',
-            title: '', // Title is handled in content
-            content: (
-                <div className="bio-content">
-                    <div className="bio-left">
-                        {/!* Your exact image path *!/}
-                        <img
-                            src="/images/tina_placeholder_aboutme.jpg"
-                            className="profile-image"
-                            alt="Tina Wan Portrait"
-                        />
-                        <h2 className="bio-title">tina wan</h2>
-                    </div>
-                    <div className="bio-right">
-                        <p>I'm Tina Wan, a visual artist and aspiring biologist...</p>
-                        <div className="contact-info">
-                            <p><span>email</span> tinawoao26@student.cis.edu.hk</p>
-                            <p><span>instagram</span> doonphie</p>
-                            <p><span>linkedin</span> linkedin.com/in/tina-wan</p>
-                            <p><span>resume</span> download here</p>
-                        </div>
-                    </div>
-                </div>
-            )
-        }
-    ];
-
-    const handleSectionClick = (index) => {
-        if (index === sections.length - 1) return; // Top layer can't be clicked
-        setActiveSection(activeSection === index ? null : index);
-    };
-
-    return (
-        <div className="about-page">
-            <h1 className="about-heading">about me</h1>
-
-            <div className="about-sections-container">
-                <div className="about-sections">
-                    {sections.map((section, index) => (
-                        <div
-                            key={section.id}
-                            className={`about-section ${
-                                activeSection !== null && index > activeSection ? 'peek-left' : ''
-                            } ${
-                                activeSection === index ? 'active' : ''
-                            }`}
-                            onClick={() => handleSectionClick(index)}
-                        >
-                            <h2>{section.title}</h2>
-                            <div className="section-content">
-                                {section.content}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-}*/

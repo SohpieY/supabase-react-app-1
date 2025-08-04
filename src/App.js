@@ -29,6 +29,7 @@ function App() {
                 <Route path="/Home" element={<HomeWithNavbar />} />
                 <Route path="/Shop" element={<ShopWithNavbar />} />
                 <Route path="/Contact" element={<ContactWithNavbar />} />
+                <Route path="/Works" element={<WorksWithNavbar />} />
             </Routes>
         </Router>
     );
