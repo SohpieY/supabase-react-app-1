@@ -450,3 +450,11 @@
     opacity: 0; /* Makes it invisible */
     pointer-events: none; /* Allows clicks to pass through */
 }
+
+.search-section{
+    margin-bottom: 10%;
+}
+
+.search-input{
+    font: 400 1rem 'IM FELL DW Pica', serif;
+}

@@ -1,13 +1,58 @@
-// src/Pages/Works.js
+// Enhanced Works.js with filtering, sorting, and search
 import './Works.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '../supabaseClient';
+
+// Keep your existing filter options
+const CATEGORY_OPTIONS = [
+    'Sculpture',
+    'Painting',
+    'Mixed Media',
+    'Digital',
+    'Print',
+    'Installation'
+];
+
+const MEDIUM_OPTIONS = [
+    'Oil Paint',
+    'Acrylic',
+    'Digital',
+    'Fabric',
+    'Clay',
+    'Ink'
+];
+
+const STYLE_OPTIONS = [
+    'Realistic',
+    'Abstract',
+    'Illustrative',
+    'Patterned',
+    'Human Figures',
+    'Animals'
+];
 
 export default function Works() {
+    // Existing state
     const [expandedSections, setExpandedSections] = useState({
         categories: false,
         medium: false,
         style: false
     });
+
+    const [artworks, setArtworks] = useState([]);
+    const [categories, setCategories] = useState(['all']);
+    const [mediums, setMediums] = useState(['all']);
+    const [selectedCategory, setSelectedCategory] = useState('all');
+    const [selectedMedium, setSelectedMedium] = useState('all');
+    const [selectedFilters, setSelectedFilters] = useState({
+        categories: [],
+        medium: [],
+        style: []
+    });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [sortBy, setSortBy] = useState('recommended'); // 'recommended', 'newest', 'oldest'
 
     const toggleSection = (section) => {
         setExpandedSections(prev => ({
@@ -15,14 +60,162 @@ export default function Works() {
             [section]: !prev[section]
         }));
     };
+    /*how */
+/*
+    // Debugging version to understand why no artworks are found
+    useEffect(() => {
+        const fetchArtworks = async () => {
+            setLoading(true);
+            setError(null);
 
-    // Placeholder data for the portfolio grid
-    const placeholderItems = Array.from({ length: 6 }, (_, i) => ({ id: i + 1 }));
+            try {
+                // First, let's check what data exists in the table
+                const { data: allData, error: allError } = await supabase
+                    .from('Artwork')
+                    .select('*');
 
+                console.log('All Artwork Data:', allData);
+                console.log('All Artwork Error:', allError);
+
+                // Create base query
+                let query = supabase
+                    .from('Artwork')
+                    .select('*');
+
+                // Add category filter - using full field name
+                if (selectedCategory !== 'all') {
+                    query = query.eq('artwork_category', selectedCategory);
+                    console.log('Filtering by category:', selectedCategory);
+                }
+
+                // Add medium filter - using full field name
+                if (selectedMedium !== 'all') {
+                    query = query.eq('artwork_medium', selectedMedium);
+                    console.log('Filtering by medium:', selectedMedium);
+                }
+
+                // Add search filter - using full field names
+                if (searchTerm) {
+                    query = query.or(`artwork_title.ilike.%${searchTerm}%,artwork_description.ilike.%${searchTerm}%`);
+                    console.log('Searching for term:', searchTerm);
+                }
+
+                // Add sorting - using full field names
+                switch (sortBy) {
+                    case 'newest':
+                        query = query.order('art_creation_date', { ascending: false });
+                        console.log('Sorting: Newest first');
+                        break;
+                    case 'oldest':
+                        query = query.order('art_creation_date', { ascending: true });
+                        console.log('Sorting: Oldest first');
+                        break;
+                    case 'recommended':
+                    default:
+                        // Sort by title using full field name
+                        query = query.order('artwork_title', { ascending: true });
+                        console.log('Sorting: By title');
+                        break;
+                }
+
+                const { data, error } = await query;
+
+                console.log('Filtered Artwork Data:', data);
+                console.log('Filtered Artwork Error:', error);
+
+                if (error) throw error;
+
+                // Log unique categories and mediums from the fetched data
+                if (data && data.length > 0) {
+                    const uniqueCategories = [...new Set(data.map(item => item.artwork_category))];
+                    const uniqueMediums = [...new Set(data.map(item => item.artwork_medium))];
+
+                    console.log('Unique Categories in Results:', uniqueCategories);
+                    console.log('Unique Mediums in Results:', uniqueMediums);
+                }
+
+                setArtworks(data || []);
+            } catch (err) {
+                console.error('Fetch Artworks Error:', err);
+                setError(`Failed to fetch artworks: ${err.message}`);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchArtworks();
+    }, [selectedCategory, selectedMedium, searchTerm, sortBy]);
+*/
+
+    // Fetch unique categories from database with detailed logging
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('Artwork')
+                    .select('artwork_category')
+                    .neq('artwork_category', null)
+                    .order('artwork_category', { ascending: true });
+
+                console.log('Categories Fetch Data:', data);
+                console.log('Categories Fetch Error:', error);
+
+                if (error) throw error;
+
+                const uniqueCategories = [...new Set(data.map(item => item.artwork_category))];
+                console.log('Unique Categories:', uniqueCategories);
+
+                setCategories(['all', ...uniqueCategories]);
+            } catch (err) {
+                console.error('Failed to fetch categories:', err);
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
+// Fetch unique mediums from database with detailed logging
+    useEffect(() => {
+        const fetchMediums = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('Artwork')
+                    .select('artwork_medium')
+                    .neq('artwork_medium', null)
+                    .order('artwork_medium', { ascending: true });
+
+                console.log('Mediums Fetch Data:', data);
+                console.log('Mediums Fetch Error:', error);
+
+                if (error) throw error;
+
+                const uniqueMediums = [...new Set(data.map(item => item.artwork_medium))];
+                console.log('Unique Mediums:', uniqueMediums);
+
+                setMediums(['all', ...uniqueMediums]);
+            } catch (err) {
+                console.error('Failed to fetch mediums:', err);
+            }
+        };
+
+        fetchMediums();
+    }, []);
+
+
+    // Handle checkbox filters
+    const handleFilterChange = (filterType, value, checked) => {
+        setSelectedFilters(prev => {
+            const newFilters = { ...prev };
+            if (checked) {
+                newFilters[filterType] = [...newFilters[filterType], value];
+            } else {
+                newFilters[filterType] = newFilters[filterType].filter(item => item !== value);
+            }
+            return newFilters;
+        });
+    };
 
     return (
-
-
         <div className="works-page">
             {/* Gallery Section */}
             <div className="works-gallery">
@@ -36,9 +229,7 @@ export default function Works() {
                     <img className={"tablecloth-print"} src={"/images/artwork/AW9_tablecloth_print.png"} alt={"tablecloth"}/>
                     <img className={"cabinet-painting"} src={"/images/artwork/AW13_cabinet_painting.png"} alt={"cabinetpainting"}/>
                     <img className={"fishes-mixedmedia"} src={"/images/artwork/AW12_fishes_mixedmedia.png"} alt={"fishesprint"}/>
-
                 </div>
-
                 <h1 className="works-secondtitle">my work</h1>
             </div>
 
@@ -83,8 +274,6 @@ export default function Works() {
                                 Working within an earthy palette of warm browns,
                                 taupes, and cream tones, I create a composition
                                 that pulses with organic energy and rhythmic flow.
-
-
                             </p>
                         </div>
                         <img
@@ -118,7 +307,6 @@ export default function Works() {
                             className="fishes-img-misenplace"
                             alt="fishes artwork"
                         />
-
                     </div>
 
                     <div className="cabinet-artwork-season">
@@ -128,8 +316,8 @@ export default function Works() {
                             alt="Cabinet artwork"
                         />
                         <div className="cabinet-text">
-                            <h3 className="cabinet-title">The Cabinet (2024)</h3>
-                            <h4 className="cabinet-subtitle">Medium: Oil Paint on Wood <br/> <br/> Description: </h4>
+                            <h3 className="cabinet-title">Roots and Branches</h3>
+                            <h4 className="cabinet-subtitle">Medium: Oil Paint, Acrylic on Wood<br/> <br/> Description: </h4>
                             <p className="cabinet-desc">
                                 The artwork explores themes of memory,
                                 cultural identity, and the personal
@@ -137,17 +325,11 @@ export default function Works() {
                                 transforming a simple storage piece into a
                                 contemplative display of meaningful possessions.
                             </p>
-
                         </div>
                     </div>
-
-
                 </div>
-
-
             </div>
-
-            {/* Portfolio Gallery Section */}
+            {/* Enhanced Portfolio Gallery Section */}
             <div className="portfolio-container">
                 <div className="portfolio-sidebar">
                     <div className="portfolio-header">
@@ -158,19 +340,48 @@ export default function Works() {
                         </p>
                     </div>
 
+                    {/* Add search functionality */}
+                    <div className="search-section">
+                        <input
+                            type="text"
+                            placeholder="Search artworks..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="search-input"
+                        />
+                    </div>
+
                     <div className="sort-section">
                         <h3>Sort</h3>
                         <div className="sort-options">
                             <label className="sort-option">
-                                <input type="radio" name="sort" value="recommended" defaultChecked />
+                                <input
+                                    type="radio"
+                                    name="sort"
+                                    value="recommended"
+                                    checked={sortBy === 'recommended'}
+                                    onChange={(e) => setSortBy(e.target.value)}
+                                />
                                 <span>Recommended</span>
                             </label>
                             <label className="sort-option">
-                                <input type="radio" name="sort" value="newest" />
+                                <input
+                                    type="radio"
+                                    name="sort"
+                                    value="newest"
+                                    checked={sortBy === 'newest'}
+                                    onChange={(e) => setSortBy(e.target.value)}
+                                />
                                 <span>Date Created: New to Old</span>
                             </label>
                             <label className="sort-option">
-                                <input type="radio" name="sort" value="oldest" />
+                                <input
+                                    type="radio"
+                                    name="sort"
+                                    value="oldest"
+                                    checked={sortBy === 'oldest'}
+                                    onChange={(e) => setSortBy(e.target.value)}
+                                />
                                 <span>Date Created: Old to New</span>
                             </label>
                         </div>
@@ -181,45 +392,89 @@ export default function Works() {
                             title="Categories"
                             expanded={expandedSections.categories}
                             onToggle={() => toggleSection('categories')}
+                            options={CATEGORY_OPTIONS}
+                            selectedFilters={selectedFilters.categories}
+                            onFilterChange={(value, checked) => handleFilterChange('categories', value, checked)}
                         />
 
                         <FilterDropdown
                             title="Medium"
                             expanded={expandedSections.medium}
                             onToggle={() => toggleSection('medium')}
+                            options={MEDIUM_OPTIONS}
+                            selectedFilters={selectedFilters.medium}
+                            onFilterChange={(value, checked) => handleFilterChange('medium', value, checked)}
                         />
 
                         <FilterDropdown
                             title="Style"
                             expanded={expandedSections.style}
                             onToggle={() => toggleSection('style')}
+                            options={STYLE_OPTIONS}
+                            selectedFilters={selectedFilters.style}
+                            onFilterChange={(value, checked) => handleFilterChange('style', value, checked)}
                         />
                     </div>
                 </div>
 
                 <div className="portfolio-gallery">
+                    {loading && <div className="loading">Loading artworks...</div>}
+                    {error && <div className="error">{error}</div>}
+
+                    {/*updated ver*/}
                     <div className="gallery-grid">
-                        {placeholderItems.map(item => (
-                            <div key={item.id} className="gallery-item">
-                                <div className="item-placeholder">
-                                    {/* Placeholder content */}
+                        {!loading && !error && artworks.length > 0 ? (
+                            artworks.map(artwork => (
+                                <div key={artwork.artwork_id} className="gallery-item">
+                                    <div className="artwork-card">
+                                        {artwork.main_img && (
+                                            <img
+                                                src={artwork.main_img}
+                                                alt={artwork.artwork_title || 'Artwork'}
+                                                className="artwork-image"
+                                            />
+                                        )}
+                                        <div className="artwork-info">
+                                            <h3>{artwork.artwork_title}</h3>
+                                            <p className="artwork-category">{artwork.artwork_category}</p>
+                                            <p className="artwork-medium">{artwork.artwork_medium}</p>
+                                            {artwork.artwork_description && (
+                                                <p className="artwork-description">{artwork.artwork_description}</p>
+                                            )}
+                                            {artwork.art_creation_date && (
+                                                <p className="artwork-date">{new Date(artwork.art_creation_date).getFullYear()}</p>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))
+                        ) : (
+                            !loading && !error && (
+                                <div className="no-results">
+                                    <p>No artworks found matching your criteria.</p>
+                                    <button
+                                        onClick={() => {
+                                            setSelectedCategory('all');
+                                            setSelectedMedium('all');
+                                            setSearchTerm('');
+                                            setSelectedFilters({ categories: [], medium: [], style: [] });
+                                        }}
+                                        className="clear-filters-btn"
+                                    >
+                                        Clear all filters
+                                    </button>
+                                </div>
+                            )
+                        )}
                     </div>
                 </div>
             </div>
-
         </div>
-
-
     );
 }
 
-
-
-// FilterDropdown component
-const FilterDropdown = ({ title, expanded, onToggle }) => {
+// Enhanced FilterDropdown component
+const FilterDropdown = ({ title, expanded, onToggle, options, selectedFilters, onFilterChange }) => {
     return (
         <div className="filter-dropdown">
             <button className="filter-header" onClick={onToggle}>
@@ -228,9 +483,18 @@ const FilterDropdown = ({ title, expanded, onToggle }) => {
             </button>
             {expanded && (
                 <div className="filter-content">
-                    <div className="filter-placeholder">
-                        Filter options will go here
-                    </div>
+                    {options.map((option) => (
+                        <label key={option} className="filter-option">
+                            <input
+                                type="checkbox"
+                                name={title.toLowerCase()}
+                                value={option}
+                                checked={selectedFilters.includes(option)}
+                                onChange={(e) => onFilterChange(option, e.target.checked)}
+                            />
+                            <span>{option}</span>
+                        </label>
+                    ))}
                 </div>
             )}
         </div>

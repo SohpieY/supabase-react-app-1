@@ -1,7 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 
 
-// Replace these two links with your own links
 // This for the Project URL
 const supabaseUrl = "https://defansizbfkuttbpebjz.supabase.co";
 

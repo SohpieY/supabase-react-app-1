@@ -58,7 +58,7 @@ export default function About() {
                         <div className="bio-left">
                             <span className="bio-title">Tina Won</span>
                             <img
-                                src="images/tina_placeholder_aboutme.jpg"
+                                src="/images/tina_placeholder_aboutme.jpg"
                                 className="profile-image"
                                 alt="Tina Won"
                             />

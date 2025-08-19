@@ -1,0 +1,255 @@
+.contact-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'IM FELL DW Pica', serif;
+}
+
+
+.contact-title{
+    position: absolute; /* Position absolutely */
+    top: 20%; /* Adjust vertical position */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%) rotate(5deg); /* Center and tilt */
+    text-align: center;
+    color: white;
+    font-size: 1.5rem;
+    font-style: italic; /* Add italic style for a more playful look */
+    z-index: 3; /* Ensure it's above other elements */
+    width: 80%; /* Allow some width for wrapping */
+    padding: 0.5rem;
+    border-radius: 8px; /* Optional: rounded corners */
+}
+
+.letter-background {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+    margin-left: 30%;
+}
+
+.letter-img {
+    position: relative;
+    width: 80%;
+    max-width: 800px;
+}
+
+.contact-postcard {
+    margin-top: 15%;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    display: block;
+}
+
+.contact-letter {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 80%;
+    transform: rotate(5deg);
+    z-index: 2;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* postcard section */
+
+.postcard-big-container {
+    position: relative;
+    width: 75%;
+    margin-left: 10%;
+}
+
+.contact-form-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /*
+    display: flex;
+    */
+    justify-content: center;
+    align-items: flex-start;
+    pointer-events: none;
+    width: 100%;
+}
+
+.contact-form {
+    position: relative;
+    margin-top: 15%;
+    margin-left: 10%;
+    width: 75%; /* Slightly smaller */
+    height: 400px; /* Set fixed height */
+    max-width: 800px;
+    background-color: transparent;
+    padding: 0;
+    z-index: 15;
+    pointer-events: auto;
+}
+
+.postcard-form {
+    display: flex;
+    gap: 0;
+}
+
+.postcard-left {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1rem 1rem 1rem;
+    transform: translateY(7%) translateX(-5%); /* Move down more and slightly right */
+    width: 21vw; /* Make it wider to match prototype */
+    height: 21vw; /* Set specific height */
+}
+
+.postcard-left label {
+    margin-bottom: 0.5rem;
+    color: #BB1F44;
+    font-size: 0.9rem;
+}
+
+.postcard-left textarea {
+    width: 100%;
+    height: 100%; /* Fill the container height */
+    resize: none;
+    padding: 0.5rem;
+    font-family: 'IM FELL DW Pica', serif;
+    font-size: 0.9rem;
+    outline: none;
+    color: #333;
+    border: 1px solid #BB1F44;
+    border-radius: 0.7rem;
+    background-color: rgba(255, 255, 255, 0.4);
+
+}
+
+.postcard-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    transform: translateY(44%) translateX(20%); /* Adjust positioning */
+    width: 35%; /* Set specific width */
+    height: 70%; /* Set specific height */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 0.3rem;
+    color: #BB1F44;
+    font-size: 1.1rem;
+}
+
+.form-group input {
+    width: 75%;
+    padding: 0.3rem;
+    font-family: 'IM FELL DW Pica', serif;
+    font-size: 0.8rem;
+    outline: none;
+  /*  color: #333;
+    border-bottom: 1px solid #ddd;*/
+    border: 1px solid #BB1F44;
+    border-radius: 0.7rem;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+#contact-name-label{
+    font-family: 'IM FELL DW Pica', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+}
+
+#contact-name-input {
+    transform: translateY(10%);
+}
+
+#email-form-group{
+    transform: translateY(-50%);
+}
+
+#contact-to-text{
+    transform: translateY(-200%);
+}
+
+.postcard-to {
+    margin-top: auto;
+    text-align: left; /* Keep it left-aligned as in your code */
+    font-size: 1rem; /* Increased from 0.8rem */
+    margin-bottom: 1rem; /* Space before button */
+}
+
+#contact-to-text {
+    text-align: left;
+}
+
+.send-button {
+    width: 50% !important; /* Make button smaller */
+    height: 8% !important; /* Set specific height */
+    padding: 0.5rem;
+    background-color: rgb(187,31,68,0.8);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'IM FELL DW Pica', serif;
+    margin-top: 1rem;
+    transform: translateY(-150%); /* Position button to the right */
+}
+
+.send-button:hover {
+    background-color: #9a1637;
+}
+
+.contact-footer {
+    text-align: center;
+    padding: 2rem;
+    background-color: #f4f4f4;
+}
+
+.contact-footer h2 {
+    color: #BB1F44;
+    margin-bottom: 1rem;
+}
+
+.contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.contact-links a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.contact-links a:hover {
+    color: #BB1F44;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .postcard-form {
+        flex-direction: column;
+    }
+
+    .postcard-left,
+    .postcard-right {
+        flex: none;
+        padding: 4%;
+    }
+
+    .contact-images {
+        width: 95%;
+    }
+
+    .contact-form {
+        width: 95%;
+    }
+}

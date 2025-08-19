@@ -42,62 +42,6 @@
 
 }
 
-/*
-!*TIMELINE (10s total: 8s show + 2s pause) *!
-@keyframes masterTimeline {
-    0% { opacity: 0; } !* Start hidden *!
-
-    !* Each artwork appears at its designated time *!
-    0.1% { opacity: 1; } !* go to visible *!
-
-    !* All disappear together at 80% (8s) *!
-    80% { opacity: 1; } !* visibility last moment *!
-    80.1% { opacity: 0; } !*  hide *!
-
-    100% { opacity: 0; } !* Stay hidden until restart *!
-}*/
-
-/* BASE STYLES FOR ALL ARTWORKS */
-.gallery-artworks img {
-    /*align-items: center;*/
-    position: absolute;
-    /*top: 360px;*/
-    /*left: 590px;*/
-    width: 20%;
-    height: auto;
-    opacity: 0;
-    animation: masterTimeline 10s infinite linear;
-    transform-origin: center;
-}
-
-
-/*TIMELINE (10s total: 8s show + 2s pause) */
-@keyframes masterTimeline {
-    0% { opacity: 0; } /* Start hidden */
-
-    /* Each artwork appears at its designated time */
-    0.1% { opacity: 1; } /* go to visible */
-
-    /* All disappear together at 80% (8s) */
-    80% { opacity: 1; } /* visibility last moment */
-    80.1% { opacity: 0; } /*  hide */
-
-    100% { opacity: 0; } /* Stay hidden until restart */
-}
-
-/* BASE STYLES FOR ALL ARTWORKS */
-.gallery-artworks img {
-    /*align-items: center;*/
-    position: absolute;
-    /*top: 360px;*/
-    /*left: 590px;*/
-    width: 20%;
-    height: auto;
-    opacity: 0;
-    animation: masterTimeline 10s infinite linear;
-    transform-origin: center;
-}
-
 /* INDIVIDUAL ARTWORK TIMING (negative delays) */
 .apples-painting {
     transform: rotate(25deg);
@@ -629,4 +573,63 @@
     .portfolio-gallery {
         padding: 1rem 0.5rem;
     }
+}
+
+/*filter*/
+/* Filter Section Enhancements */
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.filter-dropdown {
+    border-bottom: 2px solid #000000;
+}
+
+.filter-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1.2rem;
+    padding-top: 1rem;
+    background: none;
+    border: none;
+    font-family: 'IM FELL DW Pica', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #BB1F44;
+    cursor: pointer;
+    text-align: left;
+}
+
+.filter-content {
+    padding-bottom: 1rem;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.25rem 0;
+    font-family: 'IM FELL DW Pica', serif;
+    font-size: 0.9rem;
+    color: #555; /* Grey text, similar to sort options */
+}
+
+.filter-option input[type="checkbox"] {
+    margin-right: 0.5rem;
+    accent-color: #BB1F44; /* Match the radio button color in sort section */
+}
+
+.filter-option:hover {
+    color: #BB1F44; /* Same hover effect as sort options */
+}
+
+/* Ensure consistent spacing and style */
+.filter-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* Same gap as sort options */
 }
