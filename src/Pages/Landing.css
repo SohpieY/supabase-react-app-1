@@ -1,0 +1,85 @@
+/* Container - Center everything on page */
+.landing-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 20px;
+}
+
+/* Welcome Section */
+.welcome-section {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeIn 1s ease-out;
+}
+
+.login-header {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    animation: slideDown 0.8s ease-out;
+}
+
+.login-subheader {
+    font-size: 1.2rem;
+    color: #666;
+    margin: 10px 0;
+    font-weight: 400;
+    animation: fadeIn 1.2s ease-out;
+}
+
+/* Google Login - Centered */
+.google-login-container {
+    display: flex;
+    margin-top: 20% !important;
+    justify-content: center;
+    align-items: center;
+    animation: slideUp 1s ease-out;
+}
+
+/* Simple Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .login-header {
+        font-size: 2rem;
+    }
+
+    .login-subheader {
+        font-size: 1rem;
+    }
+}

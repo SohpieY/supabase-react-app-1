@@ -11,6 +11,14 @@ export default function Home() {
             {/*<Link to="/about" style={{ position: 'fixed', top: '10px', left: '10px', zIndex: 9999, background: 'red' }}>
                 TEST ABOUT LINK
             </Link>*/}
+
+            <div className={"login-directory"}>
+                <Link to="/Landing" className="login-button">
+                    <img src="/images/icons/user_icon.svg" alt="login" />
+                    <span>log in</span>
+                </Link>
+
+            </div>
             <div className="content-wrapper">
                 {/* Top Left - My Work */}
                 <Link to="/Works" className="corner-image top-left">

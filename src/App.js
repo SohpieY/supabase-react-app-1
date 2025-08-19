@@ -6,6 +6,7 @@ import About from './Pages/About'
 import Works from './Pages/Works';
 import Shop from './Pages/Shop';
 import Contact from './Pages/Contact';
+import {Landing} from "./Pages/Landing";
 
 // Create wrapped components
 const HomeWithNavbar = withNavbar(Home);
@@ -13,15 +14,14 @@ const AboutWithNavbar = withNavbar(About);
 const WorksWithNavbar = withNavbar(Works);
 const ShopWithNavbar = withNavbar(Shop);
 const ContactWithNavbar = withNavbar(Contact);
+const LoginWithNavbar = withNavbar(Landing); /*login page is called landing page because u might not login. i dunno why i named it this*/
 
 function App() {
     return (
         <Router>
             <Routes>
-                {/*
                 <Route path="/" element={<HomeWithNavbar />} />
-                */}
-                <Route path="/" element={<WorksWithNavbar />} />
+
 
 
                 {/* Other pages */}
@@ -30,6 +30,7 @@ function App() {
                 <Route path="/Shop" element={<ShopWithNavbar />} />
                 <Route path="/Contact" element={<ContactWithNavbar />} />
                 <Route path="/Works" element={<WorksWithNavbar />} />
+                <Route path="/Landing" element={<LoginWithNavbar />} />
             </Routes>
         </Router>
     );
