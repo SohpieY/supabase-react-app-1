@@ -1,4 +1,3 @@
-// Enhanced Works.js with filtering, sorting, and search
 import './Works.css';
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
@@ -22,198 +21,114 @@ const MEDIUM_OPTIONS = [
     'Ink'
 ];
 
-const STYLE_OPTIONS = [
-    'Realistic',
-    'Abstract',
-    'Illustrative',
-    'Patterned',
-    'Human Figures',
-    'Animals'
-];
-
 export default function Works() {
     // Existing state
     const [expandedSections, setExpandedSections] = useState({
         categories: false,
-        medium: false,
-        style: false
+        medium: false
     });
 
     const [artworks, setArtworks] = useState([]);
-    const [categories, setCategories] = useState(['all']);
-    const [mediums, setMediums] = useState(['all']);
-    const [selectedCategory, setSelectedCategory] = useState('all');
-    const [selectedMedium, setSelectedMedium] = useState('all');
-    const [selectedFilters, setSelectedFilters] = useState({
-        categories: [],
-        medium: [],
-        style: []
-    });
+    const [selectedCategory, setSelectedCategory] = useState([]);
+    const [selectedMedium, setSelectedMedium] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [sortBy, setSortBy] = useState('recommended'); // 'recommended', 'newest', 'oldest'
+    const [sortBy, setSortBy] = useState('recommended');
 
+    // 🔍 Toggle dropdown section visibility
     const toggleSection = (section) => {
         setExpandedSections(prev => ({
             ...prev,
             [section]: !prev[section]
         }));
     };
-    /*how */
-/*
-    // Debugging version to understand why no artworks are found
-    useEffect(() => {
-        const fetchArtworks = async () => {
-            setLoading(true);
-            setError(null);
 
-            try {
-                // First, let's check what data exists in the table
-                const { data: allData, error: allError } = await supabase
-                    .from('Artwork')
-                    .select('*');
-
-                console.log('All Artwork Data:', allData);
-                console.log('All Artwork Error:', allError);
-
-                // Create base query
-                let query = supabase
-                    .from('Artwork')
-                    .select('*');
-
-                // Add category filter - using full field name
-                if (selectedCategory !== 'all') {
-                    query = query.eq('artwork_category', selectedCategory);
-                    console.log('Filtering by category:', selectedCategory);
+    //  selection sort --> can use because the database isn't large, and it is less memory heavy
+    const selectionSort = (arr, ascending = true) => {
+        const sortedArray = [...arr];
+        for (let i = 0; i < sortedArray.length - 1; i++) {
+            let extremeIndex = i;
+            for (let j = i + 1; j < sortedArray.length; j++) {
+                const compareResult = new Date(sortedArray[j].created_at) - new Date(sortedArray[extremeIndex].created_at);
+                if (ascending ? compareResult < 0 : compareResult > 0) {
+                    extremeIndex = j;
                 }
-
-                // Add medium filter - using full field name
-                if (selectedMedium !== 'all') {
-                    query = query.eq('artwork_medium', selectedMedium);
-                    console.log('Filtering by medium:', selectedMedium);
-                }
-
-                // Add search filter - using full field names
-                if (searchTerm) {
-                    query = query.or(`artwork_title.ilike.%${searchTerm}%,artwork_description.ilike.%${searchTerm}%`);
-                    console.log('Searching for term:', searchTerm);
-                }
-
-                // Add sorting - using full field names
-                switch (sortBy) {
-                    case 'newest':
-                        query = query.order('art_creation_date', { ascending: false });
-                        console.log('Sorting: Newest first');
-                        break;
-                    case 'oldest':
-                        query = query.order('art_creation_date', { ascending: true });
-                        console.log('Sorting: Oldest first');
-                        break;
-                    case 'recommended':
-                    default:
-                        // Sort by title using full field name
-                        query = query.order('artwork_title', { ascending: true });
-                        console.log('Sorting: By title');
-                        break;
-                }
-
-                const { data, error } = await query;
-
-                console.log('Filtered Artwork Data:', data);
-                console.log('Filtered Artwork Error:', error);
-
-                if (error) throw error;
-
-                // Log unique categories and mediums from the fetched data
-                if (data && data.length > 0) {
-                    const uniqueCategories = [...new Set(data.map(item => item.artwork_category))];
-                    const uniqueMediums = [...new Set(data.map(item => item.artwork_medium))];
-
-                    console.log('Unique Categories in Results:', uniqueCategories);
-                    console.log('Unique Mediums in Results:', uniqueMediums);
-                }
-
-                setArtworks(data || []);
-            } catch (err) {
-                console.error('Fetch Artworks Error:', err);
-                setError(`Failed to fetch artworks: ${err.message}`);
-            } finally {
-                setLoading(false);
             }
-        };
-
-        fetchArtworks();
-    }, [selectedCategory, selectedMedium, searchTerm, sortBy]);
-*/
-
-    // Fetch unique categories from database with detailed logging
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from('Artwork')
-                    .select('artwork_category')
-                    .neq('artwork_category', null)
-                    .order('artwork_category', { ascending: true });
-
-                console.log('Categories Fetch Data:', data);
-                console.log('Categories Fetch Error:', error);
-
-                if (error) throw error;
-
-                const uniqueCategories = [...new Set(data.map(item => item.artwork_category))];
-                console.log('Unique Categories:', uniqueCategories);
-
-                setCategories(['all', ...uniqueCategories]);
-            } catch (err) {
-                console.error('Failed to fetch categories:', err);
+            // Swap elements
+            if (extremeIndex !== i) {
+                [sortedArray[i], sortedArray[extremeIndex]] = [sortedArray[extremeIndex], sortedArray[i]];
             }
-        };
-
-        fetchCategories();
-    }, []);
-
-// Fetch unique mediums from database with detailed logging
-    useEffect(() => {
-        const fetchMediums = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from('Artwork')
-                    .select('artwork_medium')
-                    .neq('artwork_medium', null)
-                    .order('artwork_medium', { ascending: true });
-
-                console.log('Mediums Fetch Data:', data);
-                console.log('Mediums Fetch Error:', error);
-
-                if (error) throw error;
-
-                const uniqueMediums = [...new Set(data.map(item => item.artwork_medium))];
-                console.log('Unique Mediums:', uniqueMediums);
-
-                setMediums(['all', ...uniqueMediums]);
-            } catch (err) {
-                console.error('Failed to fetch mediums:', err);
-            }
-        };
-
-        fetchMediums();
-    }, []);
-
-
-    // Handle checkbox filters
-    const handleFilterChange = (filterType, value, checked) => {
-        setSelectedFilters(prev => {
-            const newFilters = { ...prev };
-            if (checked) {
-                newFilters[filterType] = [...newFilters[filterType], value];
-            } else {
-                newFilters[filterType] = newFilters[filterType].filter(item => item !== value);
-            }
-            return newFilters;
-        });
+        }
+        return sortedArray;
     };
+
+    // Filter and sort artworks
+    const getFilteredAndSortedArtworks = () => {
+        let filtered = [...artworks];
+
+        // Apply search filter
+        if (searchTerm) {
+            filtered = filtered.filter(artwork =>
+                artwork.artwork_title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                artwork.artwork_description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                artwork.artwork_category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                artwork.artwork_medium?.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+
+        // Apply category filter
+        if (selectedCategory.length > 0) {
+            filtered = filtered.filter(artwork =>
+                selectedCategory.includes(artwork.artwork_category)
+            );
+        }
+
+        // Apply medium filter
+        if (selectedMedium.length > 0) {
+            filtered = filtered.filter(artwork =>
+                selectedMedium.includes(artwork.artwork_medium)
+            );
+        }
+
+        // Apply sorting
+        switch (sortBy) {
+            case 'newest':
+                filtered = selectionSort(filtered, false);
+                break;
+            case 'oldest':
+                filtered = selectionSort(filtered, true);
+                break;
+            default:
+                break;
+        }
+
+        return filtered;
+    };
+
+    const fetchArtworks = async () => {
+        try {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('Artwork')
+                .select('*');
+
+            if (error) {
+                throw error;
+            }
+
+            setArtworks(data || []);
+        } catch (error) {
+            setError(error.message);
+            console.error('Error fetching artworks:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchArtworks();
+    }, []);
 
     return (
         <div className="works-page">
@@ -387,33 +302,69 @@ export default function Works() {
                         </div>
                     </div>
 
+                    {/* Filter Section */}
                     <div className="filter-section">
-                        <FilterDropdown
-                            title="Categories"
-                            expanded={expandedSections.categories}
-                            onToggle={() => toggleSection('categories')}
-                            options={CATEGORY_OPTIONS}
-                            selectedFilters={selectedFilters.categories}
-                            onFilterChange={(value, checked) => handleFilterChange('categories', value, checked)}
-                        />
+                        {/* Categories Filter */}
+                        <div className="filter-dropdown">
+                            <button
+                                className="filter-header"
+                                onClick={() => toggleSection('categories')}
+                            >
+                                <span>Categories</span>
+                                <span className={`arrow ${expandedSections.categories ? 'expanded' : ''}`}>▼</span>
+                            </button>
+                            {expandedSections.categories && (
+                                <div className="filter-content">
+                                    {CATEGORY_OPTIONS.map(category => (
+                                        <label key={category} className="filter-option">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedCategory.includes(category)}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setSelectedCategory([...selectedCategory, category]);
+                                                    } else {
+                                                        setSelectedCategory(selectedCategory.filter(c => c !== category));
+                                                    }
+                                                }}
+                                            />
+                                            <span>{category}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
 
-                        <FilterDropdown
-                            title="Medium"
-                            expanded={expandedSections.medium}
-                            onToggle={() => toggleSection('medium')}
-                            options={MEDIUM_OPTIONS}
-                            selectedFilters={selectedFilters.medium}
-                            onFilterChange={(value, checked) => handleFilterChange('medium', value, checked)}
-                        />
-
-                        <FilterDropdown
-                            title="Style"
-                            expanded={expandedSections.style}
-                            onToggle={() => toggleSection('style')}
-                            options={STYLE_OPTIONS}
-                            selectedFilters={selectedFilters.style}
-                            onFilterChange={(value, checked) => handleFilterChange('style', value, checked)}
-                        />
+                        {/* Medium Filter */}
+                        <div className="filter-dropdown">
+                            <button
+                                className="filter-header"
+                                onClick={() => toggleSection('medium')}
+                            >
+                                <span>Medium</span>
+                                <span className={`arrow ${expandedSections.medium ? 'expanded' : ''}`}>▼</span>
+                            </button>
+                            {expandedSections.medium && (
+                                <div className="filter-content">
+                                    {MEDIUM_OPTIONS.map(medium => (
+                                        <label key={medium} className="filter-option">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedMedium.includes(medium)}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setSelectedMedium([...selectedMedium, medium]);
+                                                    } else {
+                                                        setSelectedMedium(selectedMedium.filter(m => m !== medium));
+                                                    }
+                                                }}
+                                            />
+                                            <span>{medium}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
@@ -441,30 +392,28 @@ export default function Works() {
                                             {artwork.artwork_description && (
                                                 <p className="artwork-description">{artwork.artwork_description}</p>
                                             )}
-                                            {artwork.art_creation_date && (
-                                                <p className="artwork-date">{new Date(artwork.art_creation_date).getFullYear()}</p>
-                                            )}
+                                            {/*{artwork.date && (*/}
+                                            {/*    <p className="artwork-date">{new Date(artwork.date).getFullYear()}</p>*/}
+                                            {/*)}*/}
                                         </div>
                                     </div>
                                 </div>
                             ))
-                        ) : (
-                            !loading && !error && (
-                                <div className="no-results">
-                                    <p>No artworks found matching your criteria.</p>
-                                    <button
-                                        onClick={() => {
-                                            setSelectedCategory('all');
-                                            setSelectedMedium('all');
-                                            setSearchTerm('');
-                                            setSelectedFilters({ categories: [], medium: [], style: [] });
-                                        }}
-                                        className="clear-filters-btn"
-                                    >
-                                        Clear all filters
-                                    </button>
-                                </div>
-                            )
+                        ) : ( <p>No match</p>
+                            // <div className="no-results">
+                            //     <p>No artworks found matching your criteria.</p>
+                            //     <button
+                            //         onClick={() => {
+                            //             setSelectedCategory('all');
+                            //             setSelectedMedium('all');
+                            //             setSearchTerm('');
+                            //             setSelectedFilters({ categories: [], medium: [], style: [] });
+                            //         }}
+                            //         className="clear-filters-btn"
+                            //     >
+                            //         Clear all filters
+                            //     </button>
+                            // </div>
                         )}
                     </div>
                 </div>
@@ -472,31 +421,3 @@ export default function Works() {
         </div>
     );
 }
-
-// Enhanced FilterDropdown component
-const FilterDropdown = ({ title, expanded, onToggle, options, selectedFilters, onFilterChange }) => {
-    return (
-        <div className="filter-dropdown">
-            <button className="filter-header" onClick={onToggle}>
-                <span>{title}</span>
-                <span className={`arrow ${expanded ? 'expanded' : ''}`}>▼</span>
-            </button>
-            {expanded && (
-                <div className="filter-content">
-                    {options.map((option) => (
-                        <label key={option} className="filter-option">
-                            <input
-                                type="checkbox"
-                                name={title.toLowerCase()}
-                                value={option}
-                                checked={selectedFilters.includes(option)}
-                                onChange={(e) => onFilterChange(option, e.target.checked)}
-                            />
-                            <span>{option}</span>
-                        </label>
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-};

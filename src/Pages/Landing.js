@@ -1,7 +1,8 @@
 import {GoogleLogin} from "@react-oauth/google"
 import './Landing.css'
+import { jwtDecode } from "jwt-decode"
 
-export function Landing() {
+export function Landing(token, options) {
     return(
         <>
 
@@ -17,9 +18,11 @@ export function Landing() {
                 <GoogleLogin
                     onSuccess={(credentialResponse) => {
                         console.log(credentialResponse);
+                        console.log(jwtDecode(credentialResponse.credential));
                     }}
                     onError={() => console.log("Login Failed :(")}
                 />
+                {/*need to add a way to inform user already sign in and which account, */}
             </div>
         </>
     )
