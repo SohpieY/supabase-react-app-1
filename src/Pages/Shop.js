@@ -1,5 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Shop.css';
+import { supabase } from '../supabaseClient';
+
+
+
+// filter optio
+const CATEGORY_OPTIONS = [
+    'Sculpture',
+    'Painting',
+    'Mixed Media',
+    'Digital',
+    'Print',
+    'Installation'
+];
+
+const MEDIUM_OPTIONS = [
+    'Oil Paint',
+    'Acrylic',
+    'Digital',
+    'Fabric',
+    'Clay',
+    'Ink'
+];
 
 // Expanded artwork data
 const placeholderArtworks = [
@@ -82,19 +104,173 @@ const FilterDropdown = ({ title, expanded, onToggle }) => {
 };
 
 export default function Shop() {
+    // Existing state
+    const [expandedSections, setExpandedSections] = useState({
+        categories: false,
+        medium: false
+    });
+
+    const [artworks, setArtworks] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState([]);
+    const [selectedMedium, setSelectedMedium] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [sortBy, setSortBy] = useState('recommended');
+
+    //  Toggle dropdown section visibility
+    const dropDownFilter = (section) => {
+        setExpandedSections(prev => ({
+            ...prev,
+            [section]: !prev[section]
+        }));
+    };
+
+    // filter and sort artworks function
+    const getFilteredAndSortedArtworks = () => {
+        // start with a copy of all artworks
+        let filteredArtworks = [...artworks];
+
+        // apply search filter if there's a search term
+        if (searchTerm) {
+            filteredArtworks = filteredArtworks.filter(artwork => {
+                // get the artwork title in lowercase for case-insensitive comparison
+                const title = artwork.artwork_title?.toLowerCase() || '';
+                // get the search term in lowercase
+                const search = searchTerm.toLowerCase();
+                // check if the title includes the search term
+                return title.includes(search);
+            });
+        }
+
+        // apply category filter if any categories are selected
+        if (selectedCategory.length > 0) {
+            filteredArtworks = filteredArtworks.filter(artwork => {
+                // check if artwork medium is in
+                return selectedCategory.includes(artwork.artwork_category);
+            });
+        }
+
+        // apply medium filter if any mediums are selected
+        if (selectedMedium.length > 0) {
+            filteredArtworks = filteredArtworks.filter(artwork => {
+                // check if artwork medium is in
+                return selectedMedium.includes(artwork.artwork_medium);
+            });
+        }
+
+        // apply sorting based on the selected option
+        if (sortBy === 'newest') {
+            // sort from newest to oldest
+            filteredArtworks = sortByDate(filteredArtworks, false);
+        }
+        else if (sortBy === 'oldest') {
+            // sort from oldest to newest
+            filteredArtworks = sortByDate(filteredArtworks, true);
+        }
+        else {
+            //  sort alphabetically by title (recommended filter)
+            filteredArtworks = alphabeticalSort(filteredArtworks);
+        }
+
+        //return the filtered and sorted artworks
+        return filteredArtworks;
+    };
+
+    const getArtworks = async () => {
+        try {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('Artwork')
+                .select('*')
+                .order('art_creation_date', {ascending: false});
+
+
+            if (error) {
+                throw error;
+            }
+
+            setArtworks(data || []);
+        } catch (error) {
+            setError(error.message);
+            console.error("Sorry! Couldn't fetch artworks! :(", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+    // Very simple alphabetical sort - step by step approach
+    const alphabeticalSort = (artworks) => {
+        // make a copy of the artworks array
+        const result = [...artworks];
+        let sorted = false;
+        let passes = 0;
+
+        // keep sorting until the array is fully sorted
+        while (!sorted && passes < result.length) {
+            sorted = true; // assume it is sorted unless made a swap
+
+            // Compare each pair of adjacent artworks
+            for (let i = 0; i < result.length - 1; i++) {
+                // get the titles in lowercase for comparison
+                const titleA = result[i].artwork_title?.toLowerCase() || '';
+                const titleB = result[i + 1].artwork_title?.toLowerCase() || '';
+
+                // If titles are in the wrong order, swap them
+                if (titleA > titleB) {
+                    // swap the artworks
+                    const temp = result[i];
+                    result[i] = result[i + 1];
+                    result[i + 1] = temp;
+                    sorted = false; //  made a swap, so it might not be sorted yet
+                }
+            }
+
+            passes++;
+        }
+
+        return result;
+    };
+
+    //  selection sort of date--> can use because the database isn't large, and it is less memory heavy
+    const sortByDate = (arr, ascending = true) => {
+        const arrayArtworkSort = [...arr];
+        for (let i = 0; i < arrayArtworkSort.length - 1; i++) {
+            let target = i;
+            for (let j = i + 1; j < arrayArtworkSort.length; j++) {
+                const dateJndex = new Date(arrayArtworkSort[j].art_creation_date);
+                const dateTarget = new Date(arrayArtworkSort[target].art_creation_date);
+
+                if (ascending) {
+                    // for oldest to newest --> find the smallest date
+                    if (dateJndex < dateTarget) {
+                        target = j;
+                    }
+                } else{
+                    // For newest to oldest --> find the largest date
+                    if (dateJndex > dateTarget) {
+                        target = j;
+                    }
+                }
+            }
+            // swap the index elements
+            if (target !== i) {
+                [arrayArtworkSort[i], arrayArtworkSort[target]] = [arrayArtworkSort[target], arrayArtworkSort[i]];
+            }
+        }
+        return arrayArtworkSort;
+    };
+
+
+    useEffect(() => {
+        getArtworks();
+    }, []);
+
     const [artworkData, setArtworkData] = useState(placeholderArtworks);
     const [currentIndex, setCurrentIndex] = useState(0);
     const carouselRef = useRef(null);
-
-    // State for portfolio section
-    const [expandedSections, setExpandedSections] = useState({
-        categories: false,
-        medium: false,
-        style: false
-    });
-
-    // Placeholder data for the portfolio grid
-    const placeholderItems = Array.from({ length: 6 }, (_, i) => ({ id: i + 1 }));
+/*
 
     const toggleSection = (section) => {
         setExpandedSections(prev => ({
@@ -102,6 +278,7 @@ export default function Shop() {
             [section]: !prev[section]
         }));
     };
+*/
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -239,64 +416,162 @@ export default function Shop() {
             </div>
 
 
-            {/* Portfolio Container Section */}
+            {/*  Portfolio Gallery Section */}
             <div className="portfolio-container">
                 <div className="portfolio-sidebar">
                     <div className="portfolio-header">
-                        <h1>Shop Collection</h1>
+                        <h1>My Work</h1>
                         <p>
-                            Here are some of my personal work that are up for purchase! Feel free to browse through my store!
+                            A collection of all my past professional and personal work! Some are refined,
+                            and some are pieces I've done in my free time. Please explore as you wish! ᕕ( ᐛ )ᕗ
                         </p>
+                    </div>
+
+                    {/* Add search functionality */}
+                    <div className="search-section">
+                        <input
+                            type="text"
+                            placeholder="Search artworks..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="search-input"
+                        />
                     </div>
 
                     <div className="sort-section">
                         <h3>Sort</h3>
                         <div className="sort-options">
                             <label className="sort-option">
-                                <input type="radio" name="sort" value="recommended" defaultChecked />
+                                <input
+                                    type="radio"
+                                    name="sort"
+                                    value="recommended"
+                                    checked={sortBy === 'recommended'}
+                                    onChange={(e) => setSortBy(e.target.value)}
+                                />
                                 <span>Recommended</span>
                             </label>
                             <label className="sort-option">
-                                <input type="radio" name="sort" value="newest" />
+                                <input
+                                    type="radio"
+                                    name="sort"
+                                    value="newest"
+                                    checked={sortBy === 'newest'}
+                                    onChange={(e) => setSortBy(e.target.value)}
+                                />
                                 <span>Date Created: New to Old</span>
                             </label>
                             <label className="sort-option">
-                                <input type="radio" name="sort" value="oldest" />
+                                <input
+                                    type="radio"
+                                    name="sort"
+                                    value="oldest"
+                                    checked={sortBy === 'oldest'}
+                                    onChange={(e) => setSortBy(e.target.value)}
+                                />
                                 <span>Date Created: Old to New</span>
                             </label>
                         </div>
                     </div>
 
+                    {/* Filter Section */}
                     <div className="filter-section">
-                        <FilterDropdown
-                            title="Categories"
-                            expanded={expandedSections.categories}
-                            onToggle={() => toggleSection('categories')}
-                        />
+                        {/* Categories Filter */}
+                        <div className="filter-dropdown">
+                            <button
+                                className="filter-header"
+                                onClick={() => dropDownFilter('categories')}
+                            >
+                                <span>Categories</span>
+                                <span className={`arrow ${expandedSections.categories ? 'expanded' : ''}`}>▼</span>
+                            </button>
+                            {expandedSections.categories && (
+                                <div className="filter-content">
+                                    {CATEGORY_OPTIONS.map(category => (
+                                        <label key={category} className="filter-option">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedCategory.includes(category)}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setSelectedCategory([...selectedCategory, category]);
+                                                    } else {
+                                                        setSelectedCategory(selectedCategory.filter(c => c !== category));
+                                                    }
+                                                }}
+                                            />
+                                            <span>{category}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
 
-                        <FilterDropdown
-                            title="Medium"
-                            expanded={expandedSections.medium}
-                            onToggle={() => toggleSection('medium')}
-                        />
-
-                        <FilterDropdown
-                            title="Style"
-                            expanded={expandedSections.style}
-                            onToggle={() => toggleSection('style')}
-                        />
+                        {/* Medium Filter */}
+                        <div className="filter-dropdown">
+                            <button
+                                className="filter-header"
+                                onClick={() => dropDownFilter('medium')}
+                            >
+                                <span>Medium</span>
+                                <span className={`arrow ${expandedSections.medium ? 'expanded' : ''}`}>▼</span>
+                            </button>
+                            {expandedSections.medium && (
+                                <div className="filter-content">
+                                    {MEDIUM_OPTIONS.map(medium => (
+                                        <label key={medium} className="filter-option">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedMedium.includes(medium)}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setSelectedMedium([...selectedMedium, medium]);
+                                                    } else {
+                                                        setSelectedMedium(selectedMedium.filter(m => m !== medium));
+                                                    }
+                                                }}
+                                            />
+                                            <span>{medium}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
                 <div className="portfolio-gallery">
+                    {loading && <div className="loading">Loading artworks...</div>}
+                    {error && <div className="error">{error}</div>}
+
+                    {/*updated ver*/}
                     <div className="gallery-grid">
-                        {placeholderItems.map(item => (
-                            <div key={item.id} className="gallery-item">
-                                <div className="item-placeholder">
-                                    {/* Placeholder content */}
+                        {!loading && !error && artworks.length > 0 ? (
+                            getFilteredAndSortedArtworks().map(artwork => (
+                                <div key={artwork.artwork_id} className="gallery-item">
+                                    <div className="artwork-card">
+                                        {artwork.main_img && (
+                                            <img
+                                                src={artwork.main_img}
+                                                alt={artwork.artwork_title || 'Artwork'}
+                                                className="artwork-image"
+                                            />
+                                        )}
+                                        <div className="artwork-info">
+                                            <h3>{artwork.artwork_title}</h3>
+                                            <p className="artwork-category">{artwork.artwork_category}</p>
+                                            <p className="artwork-medium">{artwork.artwork_medium}</p>
+                                            {/*{artwork.artwork_description && (
+                                                <p className="artwork-description">{artwork.artwork_description}</p>
+                                            )}
+                                            {artwork.date && (
+                                                <p className="artwork-date">{new Date(artwork.date).getFullYear()}</p>
+                                            )}*/}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))
+                        ) : ( <p>No artworks found</p> )}
                     </div>
                 </div>
             </div>

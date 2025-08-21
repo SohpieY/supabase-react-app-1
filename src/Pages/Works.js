@@ -2,7 +2,7 @@ import './Works.css';
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 
-// Keep your existing filter options
+// filter optio
 const CATEGORY_OPTIONS = [
     'Sculpture',
     'Painting',
@@ -36,82 +36,73 @@ export default function Works() {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState('recommended');
 
-    // 🔍 Toggle dropdown section visibility
-    const toggleSection = (section) => {
+    //  Toggle dropdown section visibility
+    const dropDownFilter = (section) => {
         setExpandedSections(prev => ({
             ...prev,
             [section]: !prev[section]
         }));
     };
 
-    //  selection sort --> can use because the database isn't large, and it is less memory heavy
-    const selectionSort = (arr, ascending = true) => {
-        const sortedArray = [...arr];
-        for (let i = 0; i < sortedArray.length - 1; i++) {
-            let extremeIndex = i;
-            for (let j = i + 1; j < sortedArray.length; j++) {
-                const compareResult = new Date(sortedArray[j].created_at) - new Date(sortedArray[extremeIndex].created_at);
-                if (ascending ? compareResult < 0 : compareResult > 0) {
-                    extremeIndex = j;
-                }
-            }
-            // Swap elements
-            if (extremeIndex !== i) {
-                [sortedArray[i], sortedArray[extremeIndex]] = [sortedArray[extremeIndex], sortedArray[i]];
-            }
-        }
-        return sortedArray;
-    };
-
-    // Filter and sort artworks
+    // filter and sort artworks function
     const getFilteredAndSortedArtworks = () => {
-        let filtered = [...artworks];
+        // start with a copy of all artworks
+        let filteredArtworks = [...artworks];
 
-        // Apply search filter
+        // apply search filter if there's a search term
         if (searchTerm) {
-            filtered = filtered.filter(artwork =>
-                artwork.artwork_title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                artwork.artwork_description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                artwork.artwork_category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                artwork.artwork_medium?.toLowerCase().includes(searchTerm.toLowerCase())
-            );
+            filteredArtworks = filteredArtworks.filter(artwork => {
+                // get the artwork title in lowercase for case-insensitive comparison
+                const title = artwork.artwork_title?.toLowerCase() || '';
+                // get the search term in lowercase
+                const search = searchTerm.toLowerCase();
+                // check if the title includes the search term
+                return title.includes(search);
+            });
         }
 
-        // Apply category filter
+        // apply category filter if any categories are selected
         if (selectedCategory.length > 0) {
-            filtered = filtered.filter(artwork =>
-                selectedCategory.includes(artwork.artwork_category)
-            );
+            filteredArtworks = filteredArtworks.filter(artwork => {
+                // check if artwork medium is in
+                return selectedCategory.includes(artwork.artwork_category);
+            });
         }
 
-        // Apply medium filter
+        // apply medium filter if any mediums are selected
         if (selectedMedium.length > 0) {
-            filtered = filtered.filter(artwork =>
-                selectedMedium.includes(artwork.artwork_medium)
-            );
+            filteredArtworks = filteredArtworks.filter(artwork => {
+                // check if artwork medium is in
+                return selectedMedium.includes(artwork.artwork_medium);
+            });
         }
 
-        // Apply sorting
-        switch (sortBy) {
-            case 'newest':
-                filtered = selectionSort(filtered, false);
-                break;
-            case 'oldest':
-                filtered = selectionSort(filtered, true);
-                break;
-            default:
-                break;
+        // apply sorting based on the selected option
+        if (sortBy === 'newest') {
+            // sort from newest to oldest
+            filteredArtworks = sortByDate(filteredArtworks, false);
+        }
+        else if (sortBy === 'oldest') {
+            // sort from oldest to newest
+            filteredArtworks = sortByDate(filteredArtworks, true);
+        }
+        else {
+            //  sort alphabetically by title (recommended filter)
+            filteredArtworks = alphabeticalSort(filteredArtworks);
         }
 
-        return filtered;
+        //return the filtered and sorted artworks
+        return filteredArtworks;
     };
 
-    const fetchArtworks = async () => {
+    const getArtworks = async () => {
         try {
             setLoading(true);
             const { data, error } = await supabase
                 .from('Artwork')
-                .select('*');
+                .select('*')
+                .order('art_creation_date', {ascending: false});
+
 
             if (error) {
                 throw error;
@@ -120,14 +111,78 @@ export default function Works() {
             setArtworks(data || []);
         } catch (error) {
             setError(error.message);
-            console.error('Error fetching artworks:', error);
+            console.error("Sorry! Couldn't fetch artworks! :(", error);
         } finally {
             setLoading(false);
         }
     };
 
+
+    // Very simple alphabetical sort - step by step approach
+    const alphabeticalSort = (artworks) => {
+        // make a copy of the artworks array
+        const result = [...artworks];
+        let sorted = false;
+        let passes = 0;
+
+        // keep sorting until the array is fully sorted
+        while (!sorted && passes < result.length) {
+            sorted = true; // assume it is sorted unless made a swap
+
+            // Compare each pair of adjacent artworks
+            for (let i = 0; i < result.length - 1; i++) {
+                // get the titles in lowercase for comparison
+                const titleA = result[i].artwork_title?.toLowerCase() || '';
+                const titleB = result[i + 1].artwork_title?.toLowerCase() || '';
+
+                // If titles are in the wrong order, swap them
+                if (titleA > titleB) {
+                    // swap the artworks
+                    const temp = result[i];
+                    result[i] = result[i + 1];
+                    result[i + 1] = temp;
+                    sorted = false; //  made a swap, so it might not be sorted yet
+                }
+            }
+
+            passes++;
+        }
+
+        return result;
+    };
+
+    //  selection sort of date--> can use because the database isn't large, and it is less memory heavy
+    const sortByDate = (arr, ascending = true) => {
+        const arrayArtworkSort = [...arr];
+        for (let i = 0; i < arrayArtworkSort.length - 1; i++) {
+            let target = i;
+            for (let j = i + 1; j < arrayArtworkSort.length; j++) {
+                const dateJndex = new Date(arrayArtworkSort[j].art_creation_date);
+                const dateTarget = new Date(arrayArtworkSort[target].art_creation_date);
+
+                if (ascending) {
+                    // for oldest to newest --> find the smallest date
+                    if (dateJndex < dateTarget) {
+                        target = j;
+                    }
+                } else{
+                    // For newest to oldest --> find the largest date
+                    if (dateJndex > dateTarget) {
+                        target = j;
+                    }
+                }
+            }
+            // swap the index elements
+            if (target !== i) {
+                [arrayArtworkSort[i], arrayArtworkSort[target]] = [arrayArtworkSort[target], arrayArtworkSort[i]];
+            }
+        }
+        return arrayArtworkSort;
+    };
+
+
     useEffect(() => {
-        fetchArtworks();
+        getArtworks();
     }, []);
 
     return (
@@ -244,7 +299,7 @@ export default function Works() {
                     </div>
                 </div>
             </div>
-            {/* Enhanced Portfolio Gallery Section */}
+            {/*  Portfolio Gallery Section */}
             <div className="portfolio-container">
                 <div className="portfolio-sidebar">
                     <div className="portfolio-header">
@@ -308,7 +363,7 @@ export default function Works() {
                         <div className="filter-dropdown">
                             <button
                                 className="filter-header"
-                                onClick={() => toggleSection('categories')}
+                                onClick={() => dropDownFilter('categories')}
                             >
                                 <span>Categories</span>
                                 <span className={`arrow ${expandedSections.categories ? 'expanded' : ''}`}>▼</span>
@@ -339,7 +394,7 @@ export default function Works() {
                         <div className="filter-dropdown">
                             <button
                                 className="filter-header"
-                                onClick={() => toggleSection('medium')}
+                                onClick={() => dropDownFilter('medium')}
                             >
                                 <span>Medium</span>
                                 <span className={`arrow ${expandedSections.medium ? 'expanded' : ''}`}>▼</span>
@@ -375,7 +430,7 @@ export default function Works() {
                     {/*updated ver*/}
                     <div className="gallery-grid">
                         {!loading && !error && artworks.length > 0 ? (
-                            artworks.map(artwork => (
+                            getFilteredAndSortedArtworks().map(artwork => (
                                 <div key={artwork.artwork_id} className="gallery-item">
                                     <div className="artwork-card">
                                         {artwork.main_img && (
@@ -389,32 +444,17 @@ export default function Works() {
                                             <h3>{artwork.artwork_title}</h3>
                                             <p className="artwork-category">{artwork.artwork_category}</p>
                                             <p className="artwork-medium">{artwork.artwork_medium}</p>
-                                            {artwork.artwork_description && (
+                                            {/*{artwork.artwork_description && (
                                                 <p className="artwork-description">{artwork.artwork_description}</p>
                                             )}
-                                            {/*{artwork.date && (*/}
-                                            {/*    <p className="artwork-date">{new Date(artwork.date).getFullYear()}</p>*/}
-                                            {/*)}*/}
+                                            {artwork.date && (
+                                                <p className="artwork-date">{new Date(artwork.date).getFullYear()}</p>
+                                            )}*/}
                                         </div>
                                     </div>
                                 </div>
                             ))
-                        ) : ( <p>No match</p>
-                            // <div className="no-results">
-                            //     <p>No artworks found matching your criteria.</p>
-                            //     <button
-                            //         onClick={() => {
-                            //             setSelectedCategory('all');
-                            //             setSelectedMedium('all');
-                            //             setSearchTerm('');
-                            //             setSelectedFilters({ categories: [], medium: [], style: [] });
-                            //         }}
-                            //         className="clear-filters-btn"
-                            //     >
-                            //         Clear all filters
-                            //     </button>
-                            // </div>
-                        )}
+                        ) : ( <p>No artworks found</p> )}
                     </div>
                 </div>
             </div>
