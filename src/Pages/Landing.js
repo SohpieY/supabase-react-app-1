@@ -1,4 +1,5 @@
 import {GoogleLogin} from "@react-oauth/google"
+import googleAPI from './googleAPI.js'
 import './Landing.css'
 import { jwtDecode } from "jwt-decode"
 import { useState } from 'react'
@@ -11,6 +12,8 @@ export function Landing({onLoginSuccess}) {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
 
+    const CLIENT_ID = "836275110441-psg7v88gkf8p9dj7i0odc9b8ehl4cmb7.apps.googleusercontent.com";
+
 
     // Handle artist login
     const artistLogin = async (e) => {
@@ -21,7 +24,7 @@ export function Landing({onLoginSuccess}) {
         try {
             // sign in with Supabase Auth
             /* this method is where supabase checks the credentials against its internal auth.users table, so it is supabase's funciton*/
-            const { data, error } = await supabase.auth.signInWithPassword({
+            const {data, error} = await supabase.auth.signInWithPassword({
                 email: username, // Using username as email
                 password: password,
             })
@@ -32,7 +35,7 @@ export function Landing({onLoginSuccess}) {
                 // Successfully logged in as artist
                 console.log('Artist logged in:', data)
                 if (onLoginSuccess) {
-                    onLoginSuccess({ type: 'artist', user: data.user })
+                    onLoginSuccess({type: 'artist', user: data.user})
                 }
             }
         } catch (err) {
@@ -43,13 +46,47 @@ export function Landing({onLoginSuccess}) {
         }
     }
 
+    /*
+    function oauthSignIn() {
+        // Google's OAuth 2.0 endpoint for requesting an access token
+        var oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
+
+        // Create <form> element to submit parameters to OAuth 2.0 endpoint.
+        var form = document.createElement('form');
+        form.setAttribute('method', 'GET'); // Send as a GET request.
+        form.setAttribute('action', oauth2Endpoint);
+
+        // Parameters to pass to OAuth 2.0 endpoint.
+        var params = {'client_id': 'CLIENT_ID',
+            'redirect_uri': 'https://defansizbfkuttbpebjz.supabase.co/auth/v2/callback',
+            'response_type': 'token',
+            'scope': 'https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/calendar.readonly',
+            'include_granted_scopes': 'true',
+            'state': 'pass-through value'};
+
+        // Add form parameters as hidden input values.
+        for (var p in params) {
+            var input = document.createElement('input');
+            input.setAttribute('type', 'hidden');
+            input.setAttribute('name', p);
+            input.setAttribute('value', params[p]);
+            form.appendChild(input);
+        }
+
+        // Add form to page and submit it to open the OAuth 2.0 endpoint.
+        document.body.appendChild(form);
+        form.submit();
+    }*/
+
+
+
     // Handle Google login for viewers
     const googleLoginSuccess = (credentialResponse) => {
         try {
             const decoded = jwtDecode(credentialResponse.credential)
             console.log('Viewer logged in:', decoded)
             if (onLoginSuccess) {
-                onLoginSuccess({ type: 'viewer', user: decoded })
+                onLoginSuccess({type: 'viewer', user: decoded})
             }
         } catch (err) {
             console.error('Google login decode error:', err)
@@ -116,6 +153,9 @@ export function Landing({onLoginSuccess}) {
                                 onSuccess={googleLoginSuccess}
                                 onError={googleError}
                             />
+
+                            <googleAPI/>
+
                         </div>
                     </div>
                 )}

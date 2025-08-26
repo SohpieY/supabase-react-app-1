@@ -10,6 +10,7 @@ import Contact from './Pages/Contact';
 import { Landing } from "./Pages/Landing";
 import { UserProfileCorner, LoginSuccessNotification } from './components/userComponent';
 import { supabase } from './supabaseClient';
+import googleAPI from './Pages/googleAPI'
 
 // Create wrapped components
 const HomeWithNavbar = withNavbar(Home);
@@ -108,9 +109,11 @@ function App() {
                     <Route
                         path="/Landing"
                         element={
-                            <LoginWithNavbar
+                            /*<LoginWithNavbar
                                 onLoginSuccess={handleLoginSuccess}
-                            />
+                            />*/
+
+                            <googleAPI/>
                         }
                     />
                 </Routes>
