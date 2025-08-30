@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import './Shop.css';
 import { supabase } from '../supabaseClient';
 import { CartState } from '../Context/Context';
-import CartIcon from "../components/cartIcon";
-
+import CartIcon from "../components/CartIcon";
+import ShopQuantity from '../components/ShopQuantity';
 
 
 // filter optio
@@ -604,9 +604,25 @@ export default function Shop() {
                                                 HKD {calculateArtworkPrice(artwork).toFixed(2)}
                                             </p>
 
-                                            {/* Add to Cart / Remove from Cart Button */}
+                                            {/* Add to Cart / Quantity Controls */}
                                             {cart.some((item) => item.id === artwork.artwork_id) ? (
                                                 <div className="cart-controls">
+                                                    <div className="quantity-section">
+                                                        <label>Quantity: </label>
+                                                        <ShopQuantity
+                                                            quantity={cart.find(item => item.id === artwork.artwork_id)?.qty || 1}
+                                                            onQuantityChange={(newQty) =>
+                                                                dispatch({
+                                                                    type: "CHANGE_CART_QTY",
+                                                                    payload: {
+                                                                        id: artwork.artwork_id,
+                                                                        qty: newQty
+                                                                    },
+                                                                })
+                                                            }
+                                                            maxQuantity={10} // Add the maxQuantity prop
+                                                        />
+                                                    </div>
                                                     <button
                                                         className="remove-from-cart-btn"
                                                         onClick={() =>

@@ -1,0 +1,80 @@
+.stack-quantity {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 0;
+    padding: 0.5rem;
+    border: 2px solid #BB1F44;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.stack-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid #BB1F44;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'IM FELL DW Pica', serif;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.stack-push {
+    color: #28a745;
+    border-color: #28a745;
+}
+
+.stack-push:hover:not(:disabled) {
+    background: #28a745;
+    color: white;
+}
+
+.stack-pop {
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+.stack-pop:hover:not(:disabled) {
+    background: #dc3545;
+    color: white;
+}
+
+.stack-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.stack-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 80px;
+}
+
+.stack-size {
+    font-weight: bold;
+    color: #BB1F44;
+    font-size: 1.1rem;
+}
+
+.stack-top {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.stack-input {
+    width: 50px;
+    height: 30px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.stack-input:focus {
+    outline: none;
+    border-color: #BB1F44;
+    box-shadow: 0 0 0 2px rgba(187, 31, 68, 0.2);
+}

@@ -773,3 +773,38 @@
     flex-direction: column;
     gap: 0.5rem; /* Same gap as sort options */
 }
+
+
+/*quantity */
+.cart-controls {
+    margin-top: 1rem;
+}
+
+.quantity-section {
+    margin: 0.5rem 0;
+}
+
+.quantity-section label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.remove-from-cart-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-family: 'IM FELL DW Pica', serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
+.remove-from-cart-btn:hover {
+    background-color: #c82333;
+}

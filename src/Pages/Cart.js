@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CartState } from '../Context/Context';
-import shopQuantity from '../components/shopQuantity';
 import './Cart.css';
+import ShopQuantity from "../components/ShopQuantity";
 
 const Cart = () => {
     const {
@@ -69,11 +69,10 @@ const Cart = () => {
                                             {/* Quantity Control */}
                                             <div className="quantity-section">
                                                 <label>Quantity: </label>
-                                                <shopQuantity
+                                                <ShopQuantity
                                                     quantity={item.qty || 1}
-                                                    onQuantityChange={(newQty) =>
-                                                        handleQuantityChange(item.id, newQty)
-                                                    }
+                                                    onQuantityChange={(newQty) => handleQuantityChange(item.id, newQty)}
+                                                    maxQuantity={10}
                                                 />
                                             </div>
 
