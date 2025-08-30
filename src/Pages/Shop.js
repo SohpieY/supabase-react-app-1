@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Shop.css';
 import { supabase } from '../supabaseClient';
+import { CartState } from '../Context/Context';
+import CartIcon from "../components/cartIcon";
 
 
 
@@ -110,6 +112,13 @@ export default function Shop() {
         medium: false
     });
 
+    // Get cart state
+    const {
+        state: { cart },
+        dispatch,
+    } = CartState();
+
+
     const [artworks, setArtworks] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState([]);
     const [selectedMedium, setSelectedMedium] = useState([]);
@@ -142,6 +151,8 @@ export default function Shop() {
                 return title.includes(search);
             });
         }
+
+
 
         // apply category filter if any categories are selected
         if (selectedCategory.length > 0) {
@@ -177,6 +188,27 @@ export default function Shop() {
         return filteredArtworks;
     };
 
+    // Price calculation function
+    const calculateArtworkPrice = (artwork) => {
+        // If artwork already has a price, use it
+        if (artwork.artwork_price && artwork.artwork_price > 0) {
+            return parseFloat(artwork.artwork_price);
+        }
+
+        // Default pricing based on category
+        const basePrices = {
+            'Painting': 2500.00,
+            'Sculpture': 3500.00,
+            'Mixed Media': 2800.00,
+            'Digital': 1800.00,
+            'Print': 1200.00,
+            'Installation': 4500.00,
+            'Default': 2000.00
+        };
+
+        return basePrices[artwork.artwork_category] || basePrices['Default'];
+    };
+
     const getArtworks = async () => {
         try {
             setLoading(true);
@@ -185,12 +217,17 @@ export default function Shop() {
                 .select('*')
                 .order('art_creation_date', {ascending: false});
 
-
             if (error) {
                 throw error;
             }
 
-            setArtworks(data || []);
+            // Add calculated prices to artworks
+            const artworksWithPrices = data.map(artwork => ({
+                ...artwork,
+                artwork_price: calculateArtworkPrice(artwork)
+            }));
+
+            setArtworks(artworksWithPrices || []);
         } catch (error) {
             setError(error.message);
             console.error("Sorry! Couldn't fetch artworks! :(", error);
@@ -311,6 +348,8 @@ export default function Shop() {
                 <img className="shop-mainimg right" src="/images/shop/shop_backgroundimg.png" alt="shop-right"/>
                 <h1 className="shop-title-heading">shop</h1>
             </div>
+
+            <div className="shop-icon"> <CartIcon/></div>
 
             {/* New arrivals carousel section */}
             <div className="new-arrivals-carousel">
@@ -544,7 +583,7 @@ export default function Shop() {
                     {loading && <div className="loading">Loading artworks...</div>}
                     {error && <div className="error">{error}</div>}
 
-                    {/*updated ver*/}
+                    {/*inserted cart*/}
                     <div className="gallery-grid">
                         {!loading && !error && artworks.length > 0 ? (
                             getFilteredAndSortedArtworks().map(artwork => (
@@ -561,12 +600,46 @@ export default function Shop() {
                                             <h3>{artwork.artwork_title}</h3>
                                             <p className="artwork-category">{artwork.artwork_category}</p>
                                             <p className="artwork-medium">{artwork.artwork_medium}</p>
-                                            {/*{artwork.artwork_description && (
-                                                <p className="artwork-description">{artwork.artwork_description}</p>
+                                            <p className="artwork-price">
+                                                HKD {calculateArtworkPrice(artwork).toFixed(2)}
+                                            </p>
+
+                                            {/* Add to Cart / Remove from Cart Button */}
+                                            {cart.some((item) => item.id === artwork.artwork_id) ? (
+                                                <div className="cart-controls">
+                                                    <button
+                                                        className="remove-from-cart-btn"
+                                                        onClick={() =>
+                                                            dispatch({
+                                                                type: "REMOVE_FROM_CART",
+                                                                payload: { id: artwork.artwork_id },
+                                                            })
+                                                        }
+                                                    >
+                                                        Remove from Cart
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <button
+                                                    className="add-to-cart-btn"
+                                                    onClick={() =>
+                                                        dispatch({
+                                                            type: "ADD_TO_CART",
+                                                            payload: {
+                                                                id: artwork.artwork_id,
+                                                                name: artwork.artwork_title,
+                                                                price: calculateArtworkPrice(artwork),
+                                                                image: artwork.main_img,
+                                                                category: artwork.artwork_category,
+                                                                medium: artwork.artwork_medium,
+                                                                qty: 1
+                                                            },
+                                                        })
+                                                    }
+                                                >
+                                                    Add to Cart - HKD {calculateArtworkPrice(artwork).toFixed(2)}
+                                                </button>
                                             )}
-                                            {artwork.date && (
-                                                <p className="artwork-date">{new Date(artwork.date).getFullYear()}</p>
-                                            )}*/}
                                         </div>
                                     </div>
                                 </div>

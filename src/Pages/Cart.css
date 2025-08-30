@@ -1,0 +1,32 @@
+.quantity-section {
+    margin: 0.5rem 0;
+}
+
+.quantity-section label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.cart-item-subtotal {
+    font-weight: bold;
+    color: #BB1F44;
+    margin-top: 0.5rem;
+}
+
+.quantity-selector {
+    margin: 0.5rem 0;
+}
+
+.quantity-selector label {
+    margin-right: 0.5rem;
+    font-weight: 600;
+}
+
+.quantity-selector select {
+    padding: 0.25rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: 'IM FELL DW Pica', serif;
+}

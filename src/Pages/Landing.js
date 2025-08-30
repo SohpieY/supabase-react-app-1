@@ -1,5 +1,5 @@
 import {GoogleLogin} from "@react-oauth/google"
-import googleAPI from './googleAPI.js'
+import googleAPI from './GoogleAPI.js'
 import './Landing.css'
 import { jwtDecode } from "jwt-decode"
 import { useState } from 'react'

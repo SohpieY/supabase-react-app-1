@@ -1,26 +1,26 @@
 import {GoogleLogin} from "@react-oauth/google"
 
 
-export default function googleAPI() {
+export default function GoogleAPI() {
 
-    var YOUR_CLIENT_ID = 'REPLACE_THIS_VALUE';
-    var YOUR_REDIRECT_URI = 'REPLACE_THIS_VALUE';
+    var CLIENT_ID = '836275110441-psg7v88gkf8p9dj7i0odc9b8ehl4cmb7.apps.googleusercontent.com';
+    var REDIRECT_URI = 'https://defansizbfkuttbpebjz.supabase.co/auth/v2/callback';
 
     // Parse query string to see if page request is coming from OAuth 2.0 server.
     var fragmentString = window.location.hash.substring(1);
     var params = {};
     var regex = /([^&=]+)=([^&]*)/g, m;
     while (m = regex.exec(fragmentString)) {
-    params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+        params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
     }
     if (Object.keys(params).length > 0 && params['state']) {
-    if (params['state'] == localStorage.getItem('state')) {
-    localStorage.setItem('oauth2-test-params', JSON.stringify(params) );
+        if (params['state'] === localStorage.getItem('state')) {
+            localStorage.setItem('oauth2-test-params', JSON.stringify(params) );
 
-        trySampleRequest();
-    } else {
-        console.log('State mismatch. Possible CSRF attack');
-    }
+            trySampleRequest();
+        } else {
+            console.log('State mismatch. Possible CSRF attack');
+        }
     }
 
         // Function to generate a random state value
@@ -72,13 +72,13 @@ export default function googleAPI() {
 
         // Check if user authorized Calendar read permission.
         if (params['scope'].includes('https://www.googleapis.com/auth/calendar.readonly')) {
-        // User authorized Calendar read permission.
-        // Calling the APIs, etc.
+        // user authorized Calendar read
+        // calling the APIs, etc.
         console.log('User authorized Calendar read permission.');
     }
         else {
-        // User didn't authorize Calendar read permission.
-        // Update UX and application accordingly
+        // user didn't authorize  read permission
+        // update UX and application
         console.log('User did not authorize Calendar read permission.');
     }
     } else {
@@ -87,7 +87,7 @@ export default function googleAPI() {
     }
 
     /*
-    * Create form to request access token from Google's OAuth 2.0 server.
+    * Create form to request access token from Google's OAuth 2.0 server
     */
     function oauth2SignIn() {
     // create random state value and store in local storage
@@ -103,8 +103,8 @@ export default function googleAPI() {
     form.setAttribute('action', oauth2Endpoint);
 
     // Parameters to pass to OAuth 2.0 endpoint.
-    var params = {'client_id': YOUR_CLIENT_ID,
-    'redirect_uri': YOUR_REDIRECT_URI,
+    var params = {'client_id': CLIENT_ID,
+    'redirect_uri': REDIRECT_URI,
     'scope': 'https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/calendar.readonly',
     'state': state,
     'include_granted_scopes': 'true',
@@ -125,7 +125,7 @@ export default function googleAPI() {
     }
 
     return(
-        <button onClick="trySampleRequest();">Try sample request</button>
+        <button onClick={trySampleRequest}>Try sample request</button>
     );
 }
 

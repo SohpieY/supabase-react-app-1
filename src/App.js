@@ -7,10 +7,11 @@ import About from './Pages/About'
 import Works from './Pages/Works';
 import Shop from './Pages/Shop';
 import Contact from './Pages/Contact';
+import Cart from './Pages/Cart';
 import { Landing } from "./Pages/Landing";
 import { UserProfileCorner, LoginSuccessNotification } from './components/userComponent';
 import { supabase } from './supabaseClient';
-import googleAPI from './Pages/googleAPI'
+import GoogleAPI from './Pages/GoogleAPI'
 
 // Create wrapped components
 const HomeWithNavbar = withNavbar(Home);
@@ -19,6 +20,7 @@ const WorksWithNavbar = withNavbar(Works);
 const ShopWithNavbar = withNavbar(Shop);
 const ContactWithNavbar = withNavbar(Contact);
 const LoginWithNavbar = withNavbar(Landing);
+const CartWithNavbar = withNavbar(Cart);
 
 function App() {
     const [user, setUser] = useState(null);
@@ -106,16 +108,25 @@ function App() {
                         path="/Works"
                         element={<WorksWithNavbar />}
                     />
+                    {/*<Route
+                        path="/Landing"
+                        element={
+                            <LoginWithNavbar
+                                onLoginSuccess={handleLoginSuccess}
+                            />
+
+
+                        }
+                    />*/}
+
                     <Route
                         path="/Landing"
                         element={
-                            /*<LoginWithNavbar
-                                onLoginSuccess={handleLoginSuccess}
-                            />*/
-
-                            <googleAPI/>
+                            <GoogleAPI />
                         }
                     />
+                    {/*path finder for cart */}
+                    <Route path={"/Cart"} element={<CartWithNavbar/>} />
                 </Routes>
             </Router>
         </>
