@@ -13,6 +13,10 @@ import { UserProfileCorner, LoginSuccessNotification } from './components/userCo
 import { supabase } from './supabaseClient';
 import GoogleAPI from './Pages/GoogleAPI'
 
+// Import the artist versions of the pages
+import shopArtist from './Pages/shopArtist';
+import worksArtist from './Pages/worksArtist';
+
 // Create wrapped components
 const HomeWithNavbar = withNavbar(Home);
 const AboutWithNavbar = withNavbar(About);
@@ -21,6 +25,10 @@ const ShopWithNavbar = withNavbar(Shop);
 const ContactWithNavbar = withNavbar(Contact);
 const LoginWithNavbar = withNavbar(Landing);
 const CartWithNavbar = withNavbar(Cart);
+
+// Create wrapped components for artist views
+const ShopArtistWithNavbar = withNavbar(shopArtist);
+const WorksArtistWithNavbar = withNavbar(worksArtist);
 
 function App() {
     const [user, setUser] = useState(null);
@@ -33,7 +41,10 @@ function App() {
 
         // Listen for auth changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_OUT') {
+            if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+                setUser(session.user);
+                setUserType('artist');
+            } else if (event === 'SIGNED_OUT') {
                 setUser(null);
                 setUserType(null);
             }
@@ -99,7 +110,13 @@ function App() {
 
             <Router>
                 <Routes>
+
                     <Route path="/" element={<HomeWithNavbar />} />
+
+{/*
+                    <Route path="/" element={<ShopArtistWithNavbar />} />
+*/}
+
                     <Route path="/About" element={<AboutWithNavbar />} />
                     <Route path="/Home" element={<HomeWithNavbar />} />
                     <Route path="/Shop" element={<ShopWithNavbar />} />
@@ -108,25 +125,33 @@ function App() {
                         path="/Works"
                         element={<WorksWithNavbar />}
                     />
+                    {/* Artist-only routes - only accessible when logged in as artist */}
+                    {userType === 'artist' && (
+                        <>
+                            <Route path="/shop-artist" element={<ShopArtistWithNavbar />} />
+                            <Route path="/works-artist" element={<WorksArtistWithNavbar />} />
+                        </>
+                    )}
                     {/*<Route
                         path="/Landing"
                         element={
                             <LoginWithNavbar
                                 onLoginSuccess={handleLoginSuccess}
                             />
-
-
                         }
                     />*/}
 
                     <Route
                         path="/Landing"
                         element={
-                            <GoogleAPI />
+                            <GoogleAPI onLoginSuccess={handleLoginSuccess} />
                         }
                     />
                     {/*path finder for cart */}
                     <Route path={"/Cart"} element={<CartWithNavbar/>} />
+
+                    {/* Redirect to home for any unknown routes */}
+                    <Route path="*" element={<HomeWithNavbar />} />
                 </Routes>
             </Router>
         </>

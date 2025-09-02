@@ -1,8 +1,10 @@
+// src/Pages/WorksArtist.js
 import './Works.css';
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
+import ArtworkForm from '../components/ArtworkForm'; // Import the form component
 
-// filter optio
+// Filter options
 const CATEGORY_OPTIONS = [
     'Sculpture',
     'Painting',
@@ -21,8 +23,8 @@ const MEDIUM_OPTIONS = [
     'Ink'
 ];
 
-export default function Works() {
-    // Existing state
+export default function WorksArtist() {
+    // Existing state from Works.js
     const [expandedSections, setExpandedSections] = useState({
         categories: false,
         medium: false
@@ -36,6 +38,9 @@ export default function Works() {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState('recommended');
 
+    // New state for artist functionality
+    const [showNewArtworkForm, setShowNewArtworkForm] = useState(false);
+
     //  Toggle dropdown section visibility
     const dropDownFilter = (section) => {
         setExpandedSections(prev => ({
@@ -44,7 +49,28 @@ export default function Works() {
         }));
     };
 
-    // filter and sort artworks function
+    const getArtworks = async () => {
+        try {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('Artwork')
+                .select('*')
+                .order('art_creation_date', {ascending: false});
+
+            if (error) {
+                throw error;
+            }
+
+            setArtworks(data || []);
+        } catch (error) {
+            setError(error.message);
+            console.error("Sorry! Couldn't fetch artworks! :(", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Filter and sort artworks function
     const getFilteredAndSortedArtworks = () => {
         // start with a copy of all artworks
         let filteredArtworks = [...artworks];
@@ -94,28 +120,6 @@ export default function Works() {
         //return the filtered and sorted artworks
         return filteredArtworks;
     };
-
-    const getArtworks = async () => {
-        try {
-            setLoading(true);
-            const { data, error } = await supabase
-                .from('Artwork')
-                .select('*')
-                .order('art_creation_date', {ascending: false});
-
-            if (error) {
-                throw error;
-            }
-
-            setArtworks(data || []);
-        } catch (error) {
-            setError(error.message);
-            console.error("Sorry! Couldn't fetch artworks! :(", error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
 
     // Very simple alphabetical sort - step by step approach
     const alphabeticalSort = (artworks) => {
@@ -179,10 +183,16 @@ export default function Works() {
         return arrayArtworkSort;
     };
 
-
     useEffect(() => {
         getArtworks();
     }, []);
+
+    // Add this new function to refresh artworks after adding a new one
+    const handleArtworkAdded = (newArtwork) => {
+        // Update the artworks state
+        setArtworks(prev => [...prev, newArtwork]);
+        setShowNewArtworkForm(false);
+    };
 
     return (
         <div className="works-page">
@@ -201,6 +211,24 @@ export default function Works() {
                 </div>
                 <h1 className="works-secondtitle">my work</h1>
             </div>
+
+            {/* Add New Artwork Button for Artists */}
+            <div className="artist-controls">
+                <button
+                    className="add-artwork-btn"
+                    onClick={() => setShowNewArtworkForm(true)}
+                >
+                    + Add New Artwork
+                </button>
+            </div>
+
+            {/* New Artwork Form Modal */}
+            {showNewArtworkForm && (
+                <ArtworkForm
+                    onArtworkAdded={handleArtworkAdded}
+                    onCancel={() => setShowNewArtworkForm(false)}
+                />
+            )}
 
             <div className="season-picks">
                 <h1 className={"season-title"}>Summer Favorites</h1>

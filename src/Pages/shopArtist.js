@@ -4,8 +4,8 @@ import { supabase } from '../supabaseClient';
 import { CartState } from '../Context/Context';
 import CartIcon from "../components/CartIcon";
 import ShopQuantity from '../components/ShopQuantity';
+import ArtworkForm from "../components/ArtworkForm";
 import useArtworkQueue from '../hooks/useArtworkQueue';
-
 
 
 // filter optio
@@ -106,7 +106,6 @@ const FilterDropdown = ({ title, expanded, onToggle }) => {
         </div>
     );
 };
-
 
 export default function Shop() {
     // Existing state
@@ -212,11 +211,12 @@ export default function Shop() {
         return basePrices[artwork.artwork_category] || basePrices['Default'];
     };
 
+    // Modify getArtworks to add new artworks to the queue
     const getArtworks = async () => {
         try {
             setLoading(true);
             const { data, error } = await supabase
-                .from('Artwork')
+                .from('artwork_shop')
                 .select('*')
                 .order('art_creation_date', {ascending: false});
 
@@ -231,6 +231,12 @@ export default function Shop() {
             }));
 
             setArtworks(artworksWithPrices || []);
+
+            // Add the newest artwork to the queue if it's not already there
+            if (data && data.length > 0) {
+                const newestArtwork = data[0]; // Assuming data is sorted by date descending
+                addToQueue(newestArtwork);
+            }
         } catch (error) {
             setError(error.message);
             console.error("Sorry! Couldn't fetch artworks! :(", error);
@@ -312,15 +318,15 @@ export default function Shop() {
     const [artworkData, setArtworkData] = useState(placeholderArtworks);
     const [currentIndex, setCurrentIndex] = useState(0);
     const carouselRef = useRef(null);
-/*
+    /*
 
-    const toggleSection = (section) => {
-        setExpandedSections(prev => ({
-            ...prev,
-            [section]: !prev[section]
-        }));
-    };
-*/
+        const toggleSection = (section) => {
+            setExpandedSections(prev => ({
+                ...prev,
+                [section]: !prev[section]
+            }));
+        };
+    */
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -344,7 +350,24 @@ export default function Shop() {
         );
     };
 
+    /*for artwork upload*/
+    const [showNewArtworkForm, setShowNewArtworkForm] = useState(false);
 
+    /*artwork upload*/
+    const handleArtworkAdded = (newArtwork) => {
+        // Add calculated price to the new artwork
+        const artworkWithPrice = {
+            ...newArtwork,
+            artwork_price: calculateArtworkPrice(newArtwork)
+        };
+
+        // Update the artworks state
+        setArtworks(prev => [...prev, artworkWithPrice]);
+        setShowNewArtworkForm(false);
+    };
+
+    // Initialize the artwork queue
+    const { newArtworks, addToQueue } = useArtworkQueue(7);
 
     return (
         <div className="shop-page">
@@ -358,6 +381,23 @@ export default function Shop() {
 
             <div className="shop-icon"> <CartIcon/></div>
 
+            {/* Add New Artwork Button for Artists */}
+            <div className="artist-controls">
+                <button
+                    className="add-artwork-btn"
+                    onClick={() => setShowNewArtworkForm(true)}
+                >
+                    + Add New Artwork
+                </button>
+            </div>
+
+            {/* New Artwork Form Modal */}
+            {showNewArtworkForm && (
+                <ArtworkForm
+                    onArtworkAdded={handleArtworkAdded}
+                    onCancel={() => setShowNewArtworkForm(false)}
+                />
+            )}
 
             {/* New arrivals carousel section */}
             <div className="new-arrivals-carousel">

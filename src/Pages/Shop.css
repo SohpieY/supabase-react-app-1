@@ -808,3 +808,182 @@
 .remove-from-cart-btn:hover {
     background-color: #c82333;
 }
+
+
+/*artwork form*/
+/* Add to Shop.css */
+.artist-controls {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+    padding: 0 2rem;
+}
+
+.add-artwork-btn {
+    background-color: #BB1F44;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-family: 'IM FELL DW Pica', serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.add-artwork-btn:hover {
+    background-color: #9a1a38;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* New Artwork Form Styles */
+.new-artwork-form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.new-artwork-form {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.new-artwork-form h2 {
+    font-family: 'IM FELL DW Pica', serif;
+    color: #BB1F44;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-family: 'IM FELL DW Pica', serif;
+    color: #333;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: 'IM FELL DW Pica', serif;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #BB1F44;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    gap: 1rem;
+}
+
+.form-actions button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-family: 'IM FELL DW Pica', serif;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-actions button[type="button"] {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.form-actions button[type="button"]:hover {
+    background-color: #e0e0e0;
+}
+
+.form-actions button[type="submit"] {
+    background-color: #BB1F44;
+    color: white;
+}
+
+.form-actions button[type="submit"]:hover {
+    background-color: #9a1a38;
+}
+
+.form-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.error-message {
+    color: #dc3545;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background-color: #f8d7da;
+    border-radius: 4px;
+    border: 1px solid #f5c6cb;
+    font-family: 'IM FELL DW Pica', serif;
+}
+
+/* Responsive design for the form */
+@media (max-width: 768px) {
+    .new-artwork-form {
+        padding: 1.5rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions button {
+        width: 100%;
+    }
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 0.5rem;
+    width: auto;
+    accent-color: #BB1F44;
+}
