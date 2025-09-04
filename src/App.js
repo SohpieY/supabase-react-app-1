@@ -111,11 +111,11 @@ function App() {
             <Router>
                 <Routes>
 
-                    <Route path="/" element={<HomeWithNavbar />} />
+                    {/*<Route path="/" element={<HomeWithNavbar />} />*/}
 
-{/*
+
                     <Route path="/" element={<ShopArtistWithNavbar />} />
-*/}
+
 
                     <Route path="/About" element={<AboutWithNavbar />} />
                     <Route path="/Home" element={<HomeWithNavbar />} />
@@ -132,21 +132,21 @@ function App() {
                             <Route path="/works-artist" element={<WorksArtistWithNavbar />} />
                         </>
                     )}
-                    {/*<Route
+                    <Route
                         path="/Landing"
                         element={
                             <LoginWithNavbar
                                 onLoginSuccess={handleLoginSuccess}
                             />
                         }
-                    />*/}
+                    />
 
-                    <Route
+                    {/*<Route
                         path="/Landing"
                         element={
                             <GoogleAPI onLoginSuccess={handleLoginSuccess} />
                         }
-                    />
+                    />*/}
                     {/*path finder for cart */}
                     <Route path={"/Cart"} element={<CartWithNavbar/>} />
 
